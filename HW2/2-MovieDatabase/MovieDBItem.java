@@ -1,7 +1,3 @@
-
-/******************************************************************************
- * MovieDB의 인터페이스에서 공통으로 사용하는 클래스.
- */
 public class MovieDBItem implements Comparable<MovieDBItem> {
 
     private final String genre;
