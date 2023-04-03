@@ -13,7 +13,6 @@ public class BigInteger implements Comparable<BigInteger>
     public int length;
     public int[] sequence;
 
-    // implement this
     public static final Pattern EXPRESSION_PATTERN = Pattern.compile("");
 
     // Constructor1 - Input : Integer sequence, sign
@@ -241,6 +240,44 @@ public class BigInteger implements Comparable<BigInteger>
     }
 
     /** 3. multiply **/
+    public BigInteger multiply(BigInteger big) {
+        // TASK1 ) Induce length of result
+        int length = this.length + big.length;
+        // TASK2 ) Initialize(fill zero) result
+        int[] result = new int[length];
+        for (int i = 0; i < length; i++) {
+            result[i] = 0;
+        }
+        // TASK2 ) Set operand as positive
+        BigInteger firstOperand = new BigInteger(this.sequence, '+');
+        BigInteger secondOperand = new BigInteger(big.sequence, '+');
+        int[] firstSeq = firstOperand.sequence;
+        int[] secondSeq = secondOperand.sequence;
+        // TASK3 ) Reverse sequence
+        int[] reversedFirstSeq = reverseSequence(firstSeq);
+        int[] reversedSecondSeq = reverseSequence(secondSeq);
+        // TASK4 ) Add first operand as much as position num of second operand
+        for (int second = 0; second < reversedSecondSeq.length; second++) {
+            // TASK4.1 ) Extract position number of second operand
+            int secondOperandElem = reversedSecondSeq[second];
+            // TASK4.2 ) Initialize temporary sequence
+            int[] temp = new int[0];
+            // TASK4.3 ) Add first operand in succession
+            for (int additionCount = 0; additionCount < secondOperandElem; additionCount++) {
+                temp = addSequences(temp, firstSeq);
+            }
+            // TASK4.4 ) Shift temporary sequence as much as index of present position of second operand
+            temp = shiftLeft(temp, second);
+            // TASK4.5 ) Update result sequence
+            result = addSequences(result, temp);
+        }
+        // TASK5 ) Decide sign of result
+        if (this.sign == big.sign) {
+            return new BigInteger(result, '+');
+        } else {
+            return new BigInteger(result, '-');
+        }
+    }
 
     public int[] addSequences(int[] seq1, int[] seq2) {
         // TASK1 ) Induce length of result
@@ -282,54 +319,6 @@ public class BigInteger implements Comparable<BigInteger>
         return result;
     }
 
-    public BigInteger multiply(BigInteger big) {
-        // TASK1 ) Induce length of result
-        int length = this.length + big.length;
-        // TASK2 ) Initialize(fill zero) result
-        int[] result = new int[length];
-        for (int i = 0; i < length; i++) {
-            result[i] = 0;
-        }
-        // TASK2 ) Set operand as positive
-        BigInteger firstOperand = new BigInteger(this.sequence, '+');
-        BigInteger secondOperand = new BigInteger(big.sequence, '+');
-        int[] firstSeq = firstOperand.sequence;
-        int[] secondSeq = secondOperand.sequence;
-        // TASK3 ) Reverse sequence
-        int[] reversedFirstSeq = reverseSequence(firstSeq);
-        int[] reversedSecondSeq = reverseSequence(secondSeq);
-        // TASK4 ) Multiply position by position
-        for (int second = 0; second < reversedSecondSeq.length; second++) {
-            int secondOperandElem = reversedSecondSeq[second];
-            int[] temp = new int[0];
-            for (int additionCount = 0; additionCount < secondOperandElem; additionCount++) {
-                temp = addSequences(temp, firstSeq);
-            }
-            temp = shiftLeft(temp, second);
-            result = addSequences(result, temp);
-//
-//            for (int first = 0; first < reversedFirstSeq.length; first++) {
-//                int firstOperandElem = reversedFirstSeq[first];
-//                // TASK4.1 ) Multiply elements and convert from Integer to String
-//                String elementMultiplication = Integer.toString(firstOperandElem * secondOperandElem);
-//                // TASK4.2 ) Convert String to Integer array
-//                int[] tempSequence = new int[elementMultiplication.length()];
-//                for (int i = 0; i < elementMultiplication.length(); i++) {
-//                    tempSequence[i] = elementMultiplication.charAt(i) - '0';
-//                }
-//                // TASK4.3 ) Shift sequence as much as sum of first and second position of element
-//                tempSequence = shiftLeft(tempSequence, first + second);
-//                // TASK4.4 ) Add result sequence and temporary sequence, and update result
-//                result = addSequences(result, tempSequence);
-//            }
-        }
-        if (this.sign == big.sign) {
-            return new BigInteger(result, '+');
-        } else {
-            return new BigInteger(result, '-');
-        }
-    }
-
     private int[] shiftLeft(int[] sequence) {
         int[] shiftedSequence = new int[sequence.length + 1];
         for (int i = 0; i < sequence.length; i++) {
@@ -351,18 +340,14 @@ public class BigInteger implements Comparable<BigInteger>
     static BigInteger evaluate(String input) throws IllegalArgumentException {
         // TASK1 ) Remove whitespace
         input = input.replaceAll("\\s", "");
-        // TASK3 ) Regularize input command
+        // TASK2 ) Regularize input command
         String regularInput = regularizeCommand(input);
-
-        /**test code**/
-//        System.out.println(regularInput);
-
-        // TASK4 ) Parse regular input
+        // TASK3 ) Parse regular input
         String[] elements = regularInput.split(",");
         BigInteger firstOperand = new BigInteger(elements[0]);
         String operator = elements[1];
         BigInteger secondOperand = new BigInteger(elements[2]);
-        // TASK5 ) Compute
+        // TASK4 ) Compute
         switch (operator) {
             case "+":
                 return firstOperand.add(secondOperand);
@@ -492,14 +477,6 @@ public class BigInteger implements Comparable<BigInteger>
         }
         return refined_operands;
     }
-
-    private static BigInteger[] processMultiplicationOperands(String input) {
-        // TASK1 ) Split input command by operator
-        String[] raw_operands = input.split("\\*");
-        BigInteger[] refined_operands = processOperands(raw_operands);
-        return refined_operands;
-    }
-
 
     /** 5. Overrode Method **/
     @Override
