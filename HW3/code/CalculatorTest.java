@@ -16,37 +16,25 @@ public class CalculatorTest
 					break;
 
 				command(input);
-			} catch (CalculationFail c) {
-				printErrorMessage();
 			} catch (Exception e) {
 				printErrorMessage();
 			}
 		}
 	}
 
-	private static void command(String input) throws CalculationFail {
-		// TODO
-
-		try {
-			// TASK1 ) Convert infix expression ot postfix expression
-			String postfix = convertInfixToPostfix(input);
-			// TASK2 ) Print postfix expression
-			printPostfix(postfix);
-			// TASK3 ) Evaluate postfix expression
-			int result = evaluatePostfix(postfix);
-			// TASK4 ) Print result
-			printResult(result);
-			return;
-		} catch (InvalidExpression invalidExpression) {
-			throw new CalculationFail();
-		}
-		catch (ImpossibleOperation impossibleOperation) {
-			throw new CalculationFail();
-		}
-
+	private static void command(String input) throws Exception {
+		// TASK1 ) Convert infix expression ot postfix expression
+		String postfix = convertInfixToPostfix(input);
+		// TASK2 ) Print postfix expression
+		printPostfix(postfix);
+		// TASK3 ) Evaluate postfix expression
+		int result = evaluatePostfix(postfix);
+		// TASK4 ) Print result
+		printResult(result);
+		return;
 	}
 
-	private static String convertInfixToPostfix(String input) throws InvalidExpression {
+	private static String convertInfixToPostfix(String input) throws Exception {
 		// TASK1 ) Eliminate whitespace
 		String infix = eliminateWhitespace(input);
 		// TASK2 ) Notate unary '-' differently
@@ -106,7 +94,7 @@ public class CalculatorTest
 				}
 				continue;
 			}
-			throw new InvalidExpression();
+			throw new Exception("Invalid Expression");
 		}
 		// TASK5 ) Pop until there's no element in operator stack
 		while (!operandStack.isEmpty()) {
@@ -150,7 +138,7 @@ public class CalculatorTest
 		return infix;
 	}
 
-	private static int precedence(char operator) throws InvalidExpression {
+	private static int precedence(char operator) throws Exception {
 		switch (operator) {
 			case '+' :
 				return 0;
@@ -171,7 +159,7 @@ public class CalculatorTest
 			case ')' :
 				return 4;
 			default :
-				throw new InvalidExpression();
+				throw new Exception("Invalid Expression");
 		}
 	}
 
@@ -185,7 +173,7 @@ public class CalculatorTest
 		System.out.println(postfix);
 	}
 
-	private static int evaluatePostfix(String postfix) throws InvalidExpression, ImpossibleOperation {
+	private static int evaluatePostfix(String postfix) throws Exception {
 		// TASK1 ) Initialize operands and operator
 		int operand1, operand2;
 		char operator;
@@ -245,7 +233,7 @@ public class CalculatorTest
 				continue;
 			}
 			// TASK4.6 ) Process Exception
-			throw new InvalidExpression();
+			throw new Exception("Invalid Expression");
 		}
 		// TASK5 ) Return result
 		int result = operationStack.pop();
@@ -263,7 +251,7 @@ public class CalculatorTest
 	private static int operate(char operator, int operand) {
 		return (- operand);
 	}
-	private static int operate(char operator, int operand1, int operand2) throws ImpossibleOperation {
+	private static int operate(char operator, int operand1, int operand2) throws Exception {
 		switch (operator) {
 			case '+':
 				return operand1 + operand2;
@@ -281,7 +269,7 @@ public class CalculatorTest
 				if (!(operand1 == 0 && operand2 < 0))
 					return (int) Math.pow(operand1, operand2);
 			default :
-				throw new ImpossibleOperation();
+				throw new Exception("Impossible Operation");
 		}
 	}
 
