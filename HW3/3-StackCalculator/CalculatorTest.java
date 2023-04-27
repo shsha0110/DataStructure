@@ -18,6 +18,7 @@ public class CalculatorTest
 				command(input);
 			} catch (Exception e) {
 				printErrorMessage();
+				//e.printStackTrace();
 			}
 		}
 	}
@@ -54,17 +55,9 @@ public class CalculatorTest
 			} else if (element == '(') {
 				operatorStack.push(element);
 			} else if (element == ')') {
-				while (!operatorStack.isEmpty() && operatorStack.peek() != '(' && operatorStack.peek() != ',') {
+				while (!operatorStack.isEmpty() && operatorStack.peek() != '(') {
 					postfix += operatorStack.pop();
 					postfix += " ";
-				}
-				long k = 0;
-				while (!operatorStack.isEmpty() && operatorStack.peek() == ',') {
-					operatorStack.pop();
-					k++;
-				}
-				if (k > 0) {
-					postfix += String.format("%d avg ", k+1);
 				}
 				if (operatorStack.isEmpty() || operatorStack.peek() != '(') {
 					throw new Exception("Invalid Expression");
@@ -72,7 +65,7 @@ public class CalculatorTest
 					operatorStack.pop();
 				}
 			} else if (isOperator(element)) {
-				if (element == '^' || element == '~' || element == ',') {
+				if (element == '^' || element == '~') {
 					while (!operatorStack.isEmpty() && precedence(element) < precedence(operatorStack.peek())) {
 						if (operatorStack.peek() == '(') {
 							throw new Exception("Invalid Expression");
@@ -139,19 +132,17 @@ public class CalculatorTest
 
 	private static int precedence(char operator) throws Exception {
 		switch (operator) {
-			case ',' :
-				return 0;
 			case '+' :
 			case '-' :
-				return 1;
+				return 0;
 			case '*' :
 			case '/' :
 			case '%' :
-				return 2;
+				return 1;
 			case '~' :
-				return 3;
+				return 2;
 			case '^' :
-				return 4;
+				return 3;
 			default :
 				return -1;
 		}
@@ -221,23 +212,6 @@ public class CalculatorTest
 				}
 				continue;
 			}
-			if (postfix.charAt(i) == 'a' && postfix.charAt(i+1) == 'v' && postfix.charAt(i+2) == 'g') {
-				long k = operationStack.pop();
-				long average = 0;
-				for (int cnt = 0; cnt < k; cnt++) {
-					if (operationStack.isEmpty()) {
-						throw new Exception("Invalid Expression");
-					} else {
-						average += operationStack.pop();
-					}
-				}
-				average /= k;
-				operationStack.push(average);
-				i = i+2;
-				lastIsDigit = false;
-				continue;
-			}
-
 			// TASK4.5 ) Ignore whitespace
 			if (Character.isWhitespace(element)) {
 				lastIsDigit = false;
@@ -255,7 +229,7 @@ public class CalculatorTest
 	}
 
 	private static boolean isOperator(char element) {
-		return element == '+' || element == '-' || element == '*' || element == '/' || element == '%' || element == '^' || element == '~' || element == ',';
+		return element == '+' || element == '-' || element == '*' || element == '/' || element == '%' || element == '^' || element == '~';
 	}
 
 	private static boolean isUnaryOperator(char element) {
