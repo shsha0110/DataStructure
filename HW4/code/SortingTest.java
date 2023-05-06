@@ -70,9 +70,20 @@ public class SortingTest
 					case 'M':	// Merge Sort
 						newvalue = DoMergeSort(newvalue);
 						break;
+
+					/** In-Place Merge Sort **/
+					case 'm':
+						newvalue = DoMergeSort2(newvalue);
+
 					case 'Q':	// Quick Sort
 						newvalue = DoQuickSort(newvalue);
 						break;
+
+					/** Improved Quick Sort **/
+					case 'q':
+						newvalue = DoQuickSort2(newvalue);
+						break;
+
 					case 'R':	// Radix Sort
 						newvalue = DoRadixSort(newvalue);
 						break;
@@ -117,6 +128,16 @@ public class SortingTest
 		// 결과로 정렬된 배열은 리턴해 주어야 하며, 두가지 방법이 있으므로 잘 생각해서 사용할것.
 		// 주어진 value 배열에서 안의 값만을 바꾸고 value를 다시 리턴하거나
 		// 같은 크기의 새로운 배열을 만들어 그 배열을 리턴할 수도 있다.
+		for (int i = value.length-1; i >= 1; i--) {
+			int last = i;
+			for (int j = 0; j < last; j++) {
+				if (value[j] > value[j+1]) {
+					int temp = value[j];
+					value[j] = value[j+1];
+					value[j+1] = temp;
+				}
+			}
+		}
 		return (value);
 	}
 
@@ -124,34 +145,259 @@ public class SortingTest
 	private static int[] DoInsertionSort(int[] value)
 	{
 		// TODO : Insertion Sort 를 구현하라.
+		for (int i = 1; i < value.length; i++) {
+			insert(value, i);
+		}
 		return (value);
+	}
+
+	private static void insert(int[] value, int lastIndex) {
+		for (int i = lastIndex; i > 0; i--) {
+			if (value[i] < value[i-1]) {
+				int temp = value[i];
+				value[i] = value[i-1];
+				value[i-1] = temp;
+			}
+			else { return; }
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	private static int[] DoHeapSort(int[] value)
 	{
 		// TODO : Heap Sort 를 구현하라.
+		buildHeap(value);
+		int temp;
+		for (int i = value.length-1; i >= 1; i--) {
+			temp = value[0];
+			value[0] = value[i];
+			value[i] = temp;
+			percolateDown(value, 0, i-1);
+		}
 		return (value);
 	}
 
+	private static void buildHeap(int[] array) {
+		if (array.length >= 2) {
+			for (int i = (array.length-2)/2; i >=0; i--) {
+				percolateDown(array, i, array.length-1);
+			}
+		}
+	}
+
+	private static void percolateDown(int[] array, int curr, int n) {
+		int child = curr * 2 + 1;
+		int rightChild = curr * 2 + 2;
+		if (child <= n) {
+			if (rightChild <= n && array[child] < array[rightChild]) {
+				child = rightChild;
+			}
+			if (array[curr] < array[child]) {
+				int temp = array[curr];
+				array[curr] = array[child];
+				array[child] = temp;
+				percolateDown(array, child, n);
+			}
+		}
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	private static int[] DoMergeSort(int[] value)
-	{
+	private static int[] DoMergeSort(int[] value) {
 		// TODO : Merge Sort 를 구현하라.
+		int start = 0, end = value.length - 1;
+		mergeSort(value, start, end);
 		return (value);
+	}
+
+	private static void mergeSort(int[] list, int start, int end) {
+		// Base case
+		if (start == end) {
+			return;
+		}
+		// Recursive case
+		int mid = start + (end - start) / 2;
+		mergeSort(list, start, mid);
+		mergeSort(list, mid+1, end);
+		merge(list, start, mid, end);
+	}
+
+	private static void merge(int[] array, int start, int mid, int end) {
+		int index = start, frontIndex = 0, backIndex = 0;
+		int[] frontSubList = Arrays.copyOfRange(array, start, mid+1);
+		int[] backSubList = Arrays.copyOfRange(array, mid+1, end+1);
+
+		while (frontIndex < frontSubList.length && backIndex < backSubList.length) {
+			if (frontSubList[frontIndex] < backSubList[backIndex]) {
+				array[index++] = frontSubList[frontIndex++];
+			} else {
+				array[index++] = backSubList[backIndex++];
+			}
+		}
+
+		if (frontIndex < frontSubList.length) {
+			while (frontIndex < frontSubList.length) {
+				array[index++] = frontSubList[frontIndex++];
+			}
+		}
+		if (backIndex < backSubList.length) {
+			while (backIndex < backSubList.length) {
+				array[index++] = backSubList[backIndex++];
+			}
+		}
+	}
+
+	private static int[] DoMergeSort2(int[] value) {
+		// TODO : In Place Merge Sort 를 구현하라.
+		int[] copy = new int[value.length];
+		for (int i = 0; i < value.length; i++) {
+			copy[i] = value[i];
+		}
+		mergeSort2(0, value.length-1, value, copy);
+		return (value);
+	}
+
+	private static void mergeSort2(int start, int end, int[] A, int[] B) {
+		if (start < end) {
+			int mid = start + (end - start) / 2;
+			mergeSort2(start, mid, B, A);
+			mergeSort2(mid+1, end, B, A);
+			merge2(start, mid, end, B, A);
+		}
+	}
+
+	private static void merge2(int start, int mid, int end, int[] C, int[] D) {
+		int i = start, j = mid+1, t = start;
+		while (i <= mid && j <= end) {
+			if (C[i] <= C[j]) {
+				D[t++] = C[i++];
+			} else {
+				D[t++] = C[j++];
+			}
+		}
+		while (i <= mid) {
+			D[t++] = C[i++];
+		}
+		while (j <= end) {
+			D[t++] = C[j++];
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	private static int[] DoQuickSort(int[] value)
 	{
 		// TODO : Quick Sort 를 구현하라.
+		int start = 0, end = value.length-1;
+		quickSort(value, start, end);
 		return (value);
+	}
+
+	private static void quickSort(int[] list, int start, int end) {
+		if (start < end) {
+			int pivot = partition(list, start, end);
+			quickSort(list, start, pivot-1);
+			quickSort(list, pivot+1, end);
+		}
+	}
+
+	private static int partition(int[] list, int start, int end) {
+		int pivot = list[end];
+		int i = start-1;
+		for (int j = start; j < end; j++) {
+			if (list[j] < pivot || (list[j] == pivot && (i - start + 1) < (j - i - 1))) {
+				int temp = list[i++];
+				list[i] = list[j];
+				list[j] = temp;
+			}
+		}
+		int temp = list[i + 1];
+		list[i + 1] = list[end];
+		list[end] = temp;
+
+		return i + 1;
+	}
+
+	private static int[] DoQuickSort2(int[] value)
+	{
+		// TODO : Quick Sort 를 구현하라.
+		int start = 0, end = value.length-1;
+		quickSort2(value, start, end);
+		return (value);
+	}
+
+	private static void quickSort2(int[] list, int start, int end) {
+		if (start < end) {
+			int[] partitions = partition2(list, start, end);
+			quickSort2(list, start, partitions[0]-1);
+			quickSort2(list, partitions[1]+1, end);
+		}
+	}
+
+	private static int[] partition2(int[] list, int start, int end) {
+		int pivot = list[end];
+		int i = start-1, j = start, k = end;
+		while (j < end && j < k) {
+			if (list[j] < pivot) {
+				int temp = list[++i];
+				list[i] = list[j];
+				list[j] = temp;
+				j++;
+			} else if (list[j] == pivot) {
+				int temp = list[--k];
+				list[k] = list[j];
+				list[j] = temp;
+			} else {
+				j++;
+			}
+		}
+		int last = end;
+		for (int index = i+1; index < k; index++) {
+			int temp = list[index];
+			list[index] = list[last];
+			list[last] = temp;
+			last--;
+		}
+		int[] partitions = {i+1, i+1+(end-k)};
+		return partitions;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	private static int[] DoRadixSort(int[] value)
 	{
 		// TODO : Radix Sort 를 구현하라.
+		int max = -1;
+		for (int i = 0; i < value.length; i++) {
+			if (value[i] > max) {
+				max = value[i];
+			}
+		}
+
+		int numDigits = (int)(Math.log10(max)) + 1;
+		for (int i = 0; i < numDigits; i++) {
+			int[] cnt = new int[10];
+			for (int j = 0; j < 10; j++) {
+				cnt[i] = 0;
+			}
+
+			for (int j = 0; j < value.length; j++) {
+				int targetNum = value[j] / (int)(Math.pow(10, i)) % 10;
+				cnt[targetNum]++;
+			}
+
+			cnt[0]--;
+			for (int j = 1; j < 10; j++) {
+				cnt[j] += cnt[j-1];
+			}
+
+			int[] copy = new int[value.length];
+			for (int j = value.length-1; j >= 0; j--) {
+				int targetNum = value[j] / (int)(Math.pow(10, i)) % 10;
+				copy[cnt[targetNum]--] = value[j];
+			}
+
+			for (int j = 0; j < copy.length; j++) {
+				value[j] = copy[j];
+			}
+		}
 		return (value);
 	}
 
