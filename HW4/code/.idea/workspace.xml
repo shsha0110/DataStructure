@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b55a91d0-a98c-4192-a933-b2f17b005bac" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithms.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithACRConditions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithDevConditions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/code.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../4-Sorting/SortingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../4-Sorting/SortingTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SortingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/SortingTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/HW4/SortingTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/../out/production/HW4/SortingTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../알고리즘 성능 비교.hwp" beforeDir="false" afterPath="$PROJECT_DIR$/../알고리즘 성능 비교.hwp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2PTZ8i25RG0oWE4tUdKs3apXWQr" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/sunghyun/Desktop/DataStructure/DataStructure/HW4/code&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b55a91d0-a98c-4192-a933-b2f17b005bac" name="Changes" comment="" />
+      <created>1683482874295</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1683482874295</updated>
+      <workItem from="1683482875798" duration="12000" />
+      <workItem from="1683523471805" duration="29362000" />
+      <workItem from="1683961745144" duration="4623000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
