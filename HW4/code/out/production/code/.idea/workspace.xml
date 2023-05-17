@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b55a91d0-a98c-4192-a933-b2f17b005bac" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithms.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithACRConditions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithDevConditions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../4-Sorting/SortingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../4-Sorting/SortingTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SortingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/SortingTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/HW4/SortingTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/../out/production/HW4/SortingTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../알고리즘 성능 비교.hwp" beforeDir="false" afterPath="$PROJECT_DIR$/../알고리즘 성능 비교.hwp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlySortedArray.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +53,8 @@
       <updated>1683482874295</updated>
       <workItem from="1683482875798" duration="12000" />
       <workItem from="1683523471805" duration="29362000" />
-      <workItem from="1683961745144" duration="993000" />
+      <workItem from="1683961745144" duration="4623000" />
+      <workItem from="1684170086914" duration="2023000" />
     </task>
     <servers />
   </component>

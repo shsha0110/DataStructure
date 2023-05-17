@@ -5,14 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b55a91d0-a98c-4192-a933-b2f17b005bac" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithms.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithACRConditions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithDevConditions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../4-Sorting/SortingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../4-Sorting/SortingTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SortingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/SortingTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/HW4/SortingTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/../out/production/HW4/SortingTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../알고리즘 성능 비교.hwp" beforeDir="false" afterPath="$PROJECT_DIR$/../알고리즘 성능 비교.hwp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlyReverseSortedArray.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlyReverseSortedArray2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlyReverseSortedArray3.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlySortedArray.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlySortedArray2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlySortedArray3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Report.hwp" beforeDir="false" afterPath="$PROJECT_DIR$/../Report.hwp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/code/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/resultsDependingOnStandardDeviation_size1e4_under2_term1e-2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/resultsDependingOnStandardDeviation_size1e4_under2_term1e-4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/resultsDependingOnStandardDeviation_size1e5_under2_term1e-2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/resultsDependingOnStandardDeviation_size1e5_under2_term1e-4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resultsB.csv" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +39,9 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2PTZ8i25RG0oWE4tUdKs3apXWQr" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -50,6 +59,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -61,6 +75,7 @@
       <workItem from="1683482875798" duration="12000" />
       <workItem from="1683523471805" duration="29362000" />
       <workItem from="1683961745144" duration="4623000" />
+      <workItem from="1684170086914" duration="26133000" />
     </task>
     <servers />
   </component>
