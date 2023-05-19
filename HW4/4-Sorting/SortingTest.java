@@ -27,15 +27,6 @@ public class SortingTest
 				value = new int[numsize];
 				for (int i = 0; i < value.length; i++)
 					value[i] = rand.nextInt(rmaximum - rminimum + 1) + rminimum;
-
-				/*********/
-				if (nums.charAt(1) == 's') {
-					value = DoMergeSort(value);
-				}
-				else if (nums.charAt(1) == 'r') {
-					value = DoReversedMergeSort(value);
-				}
-
 			}
 			else
 			{
@@ -49,18 +40,18 @@ public class SortingTest
 			while (true)
 			{
 				int[] newvalue = (int[])value.clone();
-                char algo = ' ';
+				char algo = ' ';
 
 				if (args.length == 4) {
-                    return;
-                }
+					return;
+				}
 
 				String command = args.length > 0 ? args[0] : br.readLine();
 
 				if (args.length > 0) {
-                    args = new String[4];
-                }
-				
+					args = new String[4];
+				}
+
 				long t = System.currentTimeMillis();
 				switch (command.charAt(0))
 				{
@@ -88,7 +79,7 @@ public class SortingTest
 					case 'X':
 						return;
 					default:
-						throw new IOException("");
+						return;
 				}
 				if (isRandom)
 				{
@@ -96,59 +87,19 @@ public class SortingTest
 				}
 				else
 				{
-                    if (command.charAt(0) != 'S') {
-                        for (int i = 0; i < newvalue.length; i++) {
-                            System.out.println(newvalue[i]);
-                        }
-                    } else {
-                        System.out.println(algo);
-                    }
+					if (command.charAt(0) != 'S') {
+						for (int i = 0; i < newvalue.length; i++) {
+							System.out.println(newvalue[i]);
+						}
+					} else {
+						System.out.println(algo);
+					}
 				}
 
 			}
 		}
 		catch (IOException e)
 		{
-			System.out.println("" + e.toString());
-		}
-	}
-
-	private static int[] DoReversedMergeSort(int[] value) {
-		int start = 0, end = value.length - 1;
-		reversedMergeSort(value, start, end);
-		return (value);
-	}
-	private static void reversedMergeSort(int[] list, int start, int end) {
-		// Base case
-		if (start == end) {
-			return;
-		}
-		// Recursive case
-		int mid = start + (end - start) / 2;
-		reversedMergeSort(list, start, mid);
-		reversedMergeSort(list, mid+1, end);
-		reversedMerge(list, start, mid, end);
-	}
-	private static void reversedMerge(int[] list, int start, int mid, int end) {
-		int i = start, j = mid+1, k = start;
-		int[] temp = new int[list.length];
-		while (i <= mid && j <= end) {
-			if (list[i] >= list[j]) {
-				temp[k++] = list[i++];
-			} else {
-				temp[k++] = list[j++];
-			}
-		}
-		while (i <= mid) {
-			temp[k++] = list[i++];
-		}
-		while (j <= end) {
-			temp[k++] = list[j++];
-		}
-		i = start;
-		k = start;
-		while (k <= end) {
-			list[i++] = temp[k++];
 		}
 	}
 
@@ -378,8 +329,58 @@ public class SortingTest
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-    private static char DoSearch(int[] value)
+	private static char DoSearch(int[] value)
 	{
-		return (' ');
+		double sortedRate = calculateSortedRate(value);
+		double reverseSortedRate = calculateReverseSortedRate(value);
+		double standardDeviation = calculateStandardDeviation(value);
+
+		if (sortedRate >= 0.99995) { return 'I'; }
+		else if (reverseSortedRate >= 0.99) { return 'M'; }
+		else if (standardDeviation <= 0.6) { return 'Q'; }
+		else { return 'R'; }
+	}
+
+	private static double calculateSortedRate(int[] values) {
+		int numSorted = 0;
+
+		for (int i = 0; i < values.length - 1; i++) {
+			if (values[i] <= values[i + 1]) {
+				numSorted++;
+			}
+		}
+
+		double sortedRate = (double) numSorted / (values.length - 1);
+		return sortedRate;
+	}
+
+	private static double calculateReverseSortedRate(int[] values) {
+		int numReverseSorted = 0;
+
+		for (int i = 0; i < values.length - 1; i++) {
+			if (values[i] >= values[i + 1]) {
+				numReverseSorted++;
+			}
+		}
+
+		double reverseSortedRate = (double) numReverseSorted / (values.length - 1);
+		return reverseSortedRate;
+	}
+
+	public static double calculateStandardDeviation(int[] array) {
+		double mean = 0.0;
+		double s = 0.0;
+		int length = array.length;
+
+		for (int i = 0; i < length; i++) {
+			double temp = array[i];
+			double oldMean = mean;
+			mean = oldMean + (temp - oldMean) / (i + 1);
+			s = s + (temp - oldMean) * (temp - mean);
+		}
+
+		double variance = s / (length - 1);
+
+		return Math.sqrt(variance);
 	}
 }

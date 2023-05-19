@@ -5,20 +5,51 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b55a91d0-a98c-4192-a933-b2f17b005bac" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlyReverseSortedArray.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlyReverseSortedArray2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlyReverseSortedArray3.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlySortedArray.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlySortedArray2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlySortedArray3.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSearch.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSearch2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsDependingOnDigit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithACRConditions2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithACRConditionsForDoSearch.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithACRConditionsForDoSearch2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithDevConditionsForDoSearch.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlyReverseSortedArrayForDoSearch.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestSortingAlgorithmsWithNearlySortedArrayForDoSearch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../4-Sorting/SortingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../4-Sorting/SortingTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Report.hwp" beforeDir="false" afterPath="$PROJECT_DIR$/../Report.hwp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/222_resultsDependingOnSortedRatio_size1e6_term1e-4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/222_resultsDependingOnSortedRatio_size1e6_term1e-5.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/232_resultsDependingOnReverseSortedRatio_size1e6_term1e-4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/232_resultsDependingOnReverseSortedRatio_size1e6_term1e-5.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sorting Test Result/2.2.2.1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sorting Test Result/2.2.2.2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sorting Test Result/2.4.1.1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sorting Test Result/2.4.1.2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sorting Test Result/2.4.3.1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sorting Test Result/2.4.3.2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sorting Test Result/2.4.3.3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SortingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/SortingTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/code/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/code/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/code/resultsDependingOnStandardDeviation_size1e4_under2_term1e-2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/code/resultsDependingOnStandardDeviation_size1e4_under2_term1e-4.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/code/resultsDependingOnStandardDeviation_size1e5_under2_term1e-2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/code/resultsDependingOnStandardDeviation_size1e5_under2_term1e-4.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resultsB.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/232_resultsDependingOnReverseSortedRatio_size1e6.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/232_resultsDependingOnReverseSortedRatio_size1e6_earlyStop.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/232_resultsDependingOnReverseSortedRatio_size1e6_term1e-4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/Sorting Test Result/2.2.2.1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/Sorting Test Result/2.2.2.2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/Sorting Test Result/2.4.1.1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/Sorting Test Result/2.4.1.2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/Sorting Test Result/2.4.3.1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/Sorting Test Result/2.4.3.2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/Sorting Test Result/2.4.3.3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/SortingTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/code/SortingTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/resultsDependingOnSortedRatio_size1e6.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/resultsDependingOnSortedRatio_size1e6_without_InsertionSort.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/resultsDependingOnSortedRatio_size1e6_without_InsertionSort_earlyStop.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/code/test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resultsDependingOnSortedRatio_size1e6.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resultsDependingOnSortedRatio_size1e6_without_InsertionSort.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../알고리즘 성능 비교.hwp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../알고리즘 성능 평가문서.hwp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +68,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2PTZ8i25RG0oWE4tUdKs3apXWQr" />
   <component name="ProjectLevelVcsManager">
@@ -76,6 +110,9 @@
       <workItem from="1683523471805" duration="29362000" />
       <workItem from="1683961745144" duration="4623000" />
       <workItem from="1684170086914" duration="26133000" />
+      <workItem from="1684339127850" duration="4564000" />
+      <workItem from="1684385903332" duration="31207000" />
+      <workItem from="1684481361566" duration="85000" />
     </task>
     <servers />
   </component>

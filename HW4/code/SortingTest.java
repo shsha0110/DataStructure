@@ -9,40 +9,37 @@ public class SortingTest
 
 		try
 		{
-			boolean isRandom = false;	// 입력받은 배열이 난수인가 아닌가?
-			int[] value;	// 입력 받을 숫자들의 배열
-			String nums = br.readLine();	// 첫 줄을 입력 받음
+			boolean isRandom = false;
+			int[] value;
+			String nums = br.readLine();
 			if (nums.charAt(0) == 'r')
 			{
-				// 난수일 경우
-				isRandom = true;	// 난수임을 표시
+				isRandom = true;
 
 				String[] nums_arg = nums.split(" ");
 
-				int numsize = Integer.parseInt(nums_arg[1]);	// 총 갯수
-				int rminimum = Integer.parseInt(nums_arg[2]);	// 최소값
-				int rmaximum = Integer.parseInt(nums_arg[3]);	// 최대값
+				int numsize = Integer.parseInt(nums_arg[1]);
+				int rminimum = Integer.parseInt(nums_arg[2]);
+				int rmaximum = Integer.parseInt(nums_arg[3]);
 
-				Random rand = new Random();	// 난수 인스턴스를 생성한다.
+				Random rand = new Random();
 
-				value = new int[numsize];	// 배열을 생성한다.
-				for (int i = 0; i < value.length; i++)	// 각각의 배열에 난수를 생성하여 대입
+				value = new int[numsize];
+				for (int i = 0; i < value.length; i++)
 					value[i] = rand.nextInt(rmaximum - rminimum + 1) + rminimum;
 			}
 			else
 			{
-				// 난수가 아닐 경우
 				int numsize = Integer.parseInt(nums);
 
-				value = new int[numsize];	// 배열을 생성한다.
-				for (int i = 0; i < value.length; i++)	// 한줄씩 입력받아 배열원소로 대입
+				value = new int[numsize];
+				for (int i = 0; i < value.length; i++)
 					value[i] = Integer.parseInt(br.readLine());
 			}
 
-			// 숫자 입력을 다 받았으므로 정렬 방법을 받아 그에 맞는 정렬을 수행한다.
 			while (true)
 			{
-				int[] newvalue = (int[])value.clone();	// 원래 값의 보호를 위해 복사본을 생성한다.
+				int[] newvalue = (int[])value.clone();
 				char algo = ' ';
 
 				if (args.length == 4) {
@@ -80,18 +77,16 @@ public class SortingTest
 						algo = DoSearch(newvalue);
 						break;
 					case 'X':
-						return;	// 프로그램을 종료한다.
+						return;
 					default:
 						throw new IOException("잘못된 정렬 방법을 입력했습니다.");
 				}
 				if (isRandom)
 				{
-					// 난수일 경우 수행시간을 출력한다.
 					System.out.println((System.currentTimeMillis() - t) + " ms");
 				}
 				else
 				{
-					// 난수가 아닐 경우 정렬된 결과값을 출력한다.
 					if (command.charAt(0) != 'S') {
 						for (int i = 0; i < newvalue.length; i++) {
 							System.out.println(newvalue[i]);
@@ -335,11 +330,58 @@ public class SortingTest
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-    private static char DoSearch(int[] value)
+	private static char DoSearch(int[] value)
 	{
-		return (' ');
+		double sortedRate = calculateSortedRate(value);
+		double reverseSortedRate = calculateReverseSortedRate(value);
+		double standardDeviation = calculateStandardDeviation(value);
+
+		if (sortedRate >= 0.99995) { return 'I'; }
+		else if (reverseSortedRate >= 0.99) { return 'M'; }
+		else if (standardDeviation <= 0.6) { return 'Q'; }
+		else { return 'R'; }
 	}
 
+	private static double calculateSortedRate(int[] values) {
+		int numSorted = 0;
 
+		for (int i = 0; i < values.length - 1; i++) {
+			if (values[i] <= values[i + 1]) {
+				numSorted++;
+			}
+		}
 
+		double sortedRate = (double) numSorted / (values.length - 1);
+		return sortedRate;
+	}
+
+	private static double calculateReverseSortedRate(int[] values) {
+		int numReverseSorted = 0;
+
+		for (int i = 0; i < values.length - 1; i++) {
+			if (values[i] >= values[i + 1]) {
+				numReverseSorted++;
+			}
+		}
+
+		double reverseSortedRate = (double) numReverseSorted / (values.length - 1);
+		return reverseSortedRate;
+	}
+
+	public static double calculateStandardDeviation(int[] array) {
+		double mean = 0.0;
+		double s = 0.0;
+		int length = array.length;
+
+		for (int i = 0; i < length; i++) {
+			double temp = array[i];
+			double oldMean = mean;
+			mean = oldMean + (temp - oldMean) / (i + 1);
+			s = s + (temp - oldMean) * (temp - mean);
+		}
+
+		double variance = s / (length - 1);
+
+		return Math.sqrt(variance);
+	}
 }
