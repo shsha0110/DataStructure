@@ -683,46 +683,21 @@ public class Matching
 
 	/** 패턴 검색 **/
 	private static void matchPattern(String pattern) {
+		// TASK1 ) Create target pattern
+		LinkedList<Pair> targetPattern = new LinkedList<Pair>(pattern);
+		// TASK2 ) Search matched patterns in hash table
+		AVLNode detected = hashTable.search(targetPattern);
+		// TASK3 ) Print result
 		String result = "";
-		for (int lineNum = 1; lineNum <= corpus.len(); lineNum++) {
-			int index = lineNum - 1;
-			// TASK1 ) Get line
-			String line = corpus.get(index);
-			// TASK2 ) Detect pattern
-			LinkedList<Pair> detected = detectPattern(line, pattern, lineNum);
-			// TASK3 ) Aggregate pairs
-			for (int i = 0; i < detected.len(); i++) {
-				Pair node = detected.get(i);
+		for (int i = 0; i < detected.item.len(); i++) {
+				Pair node = detected.item.get(i);
 				result += node.toString() + " ";
-			}
 		}
-		// TASK4 ) Trim
 		result = result.trim();
-		// TASK5 ) Print
 		if (result.isEmpty() || result.isBlank()) {
 			System.out.println("(0, 0)");
 		} else {
 			System.out.println(result);
 		}
-	}
-
-	private static LinkedList<Pair> detectPattern(String line, String pattern, int lineNum) {
-		// TASK1 ) Initialize linked list that contains pair
-		LinkedList<Pair> detected = new LinkedList<Pair>();
-		// TASK2 ) Calculate pattern length
-		int patternLen = pattern.length();
-		// TASK3 )
-		for (int startPoint = 0; startPoint <= line.length() - patternLen; startPoint++) {
-			// TASK3.1 ) Slice sub-string
-			String subString = line.substring(startPoint, startPoint + patternLen);
-			// TASK3.2 ) Check
-			if (subString.equals(pattern)) {
-				// TASK3.2.1 ) Create pair
-				Pair pair = new Pair(lineNum, startPoint + 1);
-				// TASK3.2.2 ) Append
-				detected.append(pair);
-			}
-		}
-		return detected;
 	}
 }
