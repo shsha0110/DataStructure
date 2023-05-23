@@ -263,11 +263,11 @@ public class Matching
 			if (currNode == NIL) {
 				return NIL;
 			}
-			if (x.compareTo(currNode.item) == 0) {
+			if ((x.key).compareTo(currNode.key) == 0) {
 				return currNode;
-			} else if (x.compareTo(currNode.item) < 0) {
+			} else if ((x.key).compareTo(currNode.key) < 0) {
 				return searchItem(currNode.left, x);
-			} else if (x.compareTo(currNode.item) > 0) {
+			} else if ((x.key).compareTo(currNode.key) > 0) {
 				return searchItem(currNode.right, x);
 			}
 			return NIL;
@@ -313,16 +313,16 @@ public class Matching
 			if (currNode == NIL) {
 				return NIL;
 			}
-			if (x.compareTo(currNode.item) == 0) {
+			if ((x.key).compareTo(currNode.item.key) == 0) {
 				return deleteNode(currNode);
-			} else if (x.compareTo(currNode.item) < 0) {
+			} else if ((x.key).compareTo(currNode.item.key) < 0) {
 				currNode.left = deleteItem(currNode.left, x);
 				currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 				int type = needBalance(currNode);
 				if (type != NO_NEED) {
 					currNode = balanceAVL(currNode, type);
 				}
-			} else if (x.compareTo(currNode.item) > 0) {
+			} else if ((x.key).compareTo(currNode.item.key) > 0) {
 				currNode.right = deleteItem(currNode.right, x);
 				currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 				int type = needBalance(currNode);
