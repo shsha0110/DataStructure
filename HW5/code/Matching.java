@@ -81,38 +81,26 @@ public class Matching
 	/** Inner Class3 : Linked List **/
 	public static class LinkedList<T> implements Comparable {
 		public String key;
-		public int value;
 		public Node<T> head;
 		private int numItems;
 
 		public LinkedList() {
 			key = "";
-			value = calculateValue(key);
 			head = new Node<T>(null);
 			numItems = 0;
 		}
 
 		public LinkedList(String key) {
 			this.key = key;
-			value = calculateValue(key);
 			head = new Node<T>(null);
 			numItems = 0;
 		}
 
 		public LinkedList(String key, T item) {
 			this.key = key;
-			value = calculateValue(key);
 			head = new Node<T>(null);
 			head.insertNext(item);
 			numItems = 1;
-		}
-
-		private int calculateValue(String key) {
-			int sumOfASCII = 0;
-			for (int i = 0; i < key.length(); i++) {
-				sumOfASCII += (int)(key.charAt(i));
-			}
-			return sumOfASCII;
 		}
 
 		public void add(int i, T x) {
@@ -225,14 +213,12 @@ public class Matching
 	/** Inner Class4 : AVLNode **/
 	public static class AVLNode {
 		public String key;
-		public int value;
 		public LinkedList<Pair> item;
 		public AVLNode left, right;
 		public int height;
 
 		public AVLNode(LinkedList<Pair> item) {
 			this.key = item.key;
-			this.value = item.value;
 			this.item = item;
 			this.left = this.right = AVLTree.NIL;
 			this.height = 1;
@@ -240,7 +226,6 @@ public class Matching
 
 		public AVLNode(LinkedList<Pair> item, AVLNode leftChild, AVLNode rightChild) {
 			this.key = item.key;
-			this.value = item.value;
 			this.item = item;
 			this.left = leftChild;
 			this.right = rightChild;
@@ -249,7 +234,6 @@ public class Matching
 
 		public AVLNode(LinkedList<Pair> item, AVLNode leftChild, AVLNode rightChild, int height) {
 			this.key = item.key;
-			this.value = item.value;
 			this.item = item;
 			this.left = leftChild;
 			this.right = rightChild;
