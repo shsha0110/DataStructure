@@ -725,6 +725,13 @@ public class Matching
 	}
 
 	private static void appendSentence(String sentence) {
-
+		// TASK1 ) Append input sentence in corpus
+		corpus.append(sentence);
+		int lineNum = corpus.len();
+		// TASK2 ) Slice sub-strings
+		String[] subStrings = sliceSubStrings(sentence, 6);
+		// TASK3 ) Hash sub-strings
+		hashSubStrings(subStrings, lineNum);
+		System.out.println(lineNum);
 	}
 }
