@@ -609,6 +609,13 @@ public class Matching
 				String PATTERN = input.split("\\s")[1];
 				matchPattern(PATTERN);
 				return;
+			// 문자열 삭제 : / (6의 길이를 가진 문자열)
+			case '/' :
+				String SUBSTRING = input.split("\\s")[1];
+				removeSubString(SUBSTRING);
+				// 문장 추가 : + (문장)
+				String SENTENCE = input.split("\\s")[1];
+				appendSentence(SENTENCE);
 			default :
 				return;
 		}
@@ -712,5 +719,12 @@ public class Matching
 		} else {
 			System.out.println(result);
 		}
+	}
+
+	private static void removeSubString(String substring) {
+	}
+
+	private static void appendSentence(String sentence) {
+
 	}
 }
