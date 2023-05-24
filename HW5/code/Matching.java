@@ -229,7 +229,6 @@ public class Matching
 		public LinkedList<Pair> item;
 		public AVLNode left, right;
 		public int height;
-		public AVLNode[] child;
 
 		public AVLNode(LinkedList<Pair> item) {
 			this.key = item.key;
@@ -237,7 +236,6 @@ public class Matching
 			this.item = item;
 			this.left = this.right = AVLTree.NIL;
 			this.height = 1;
-			this.child = new AVLNode[]{left, right};
 		}
 
 		public AVLNode(LinkedList<Pair> item, AVLNode leftChild, AVLNode rightChild) {
@@ -247,7 +245,6 @@ public class Matching
 			this.left = leftChild;
 			this.right = rightChild;
 			this.height = 1;
-			this.child = new AVLNode[]{left, right};
 		}
 
 		public AVLNode(LinkedList<Pair> item, AVLNode leftChild, AVLNode rightChild, int height) {
@@ -257,7 +254,6 @@ public class Matching
 			this.left = leftChild;
 			this.right = rightChild;
 			this.height = height;
-			this.child = new AVLNode[]{left, right};
 		}
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,7 +484,8 @@ public class Matching
 				return;
 			}
 			visit(currNode, visited);
-			for (AVLNode child : currNode.child) {
+			AVLNode[] children = new AVLNode[]{currNode.left, currNode.right};
+			for (AVLNode child : children) {
 				preorderHelp(child, visited);
 			}
 		}
