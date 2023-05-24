@@ -81,26 +81,38 @@ public class Matching
 	/** Inner Class3 : Linked List **/
 	public static class LinkedList<T> implements Comparable {
 		public String key;
+		public int value;
 		public Node<T> head;
 		private int numItems;
 
 		public LinkedList() {
 			key = "";
+			value = calculateValue(key);
 			head = new Node<T>(null);
 			numItems = 0;
 		}
 
 		public LinkedList(String key) {
 			this.key = key;
+			value = calculateValue(key);
 			head = new Node<T>(null);
 			numItems = 0;
 		}
 
 		public LinkedList(String key, T item) {
 			this.key = key;
+			value = calculateValue(key);
 			head = new Node<T>(null);
 			head.insertNext(item);
 			numItems = 1;
+		}
+
+		private int calculateValue(String key) {
+			int sumOfASCII = 0;
+			for (int i = 0; i < key.length(); i++) {
+				sumOfASCII += (int)(key.charAt(i));
+			}
+			return sumOfASCII;
 		}
 
 		public void add(int i, T x) {
@@ -213,6 +225,7 @@ public class Matching
 	/** Inner Class4 : AVLNode **/
 	public static class AVLNode {
 		public String key;
+		public int value;
 		public LinkedList<Pair> item;
 		public AVLNode left, right;
 		public int height;
@@ -220,6 +233,7 @@ public class Matching
 
 		public AVLNode(LinkedList<Pair> item) {
 			this.key = item.key;
+			this.value = item.value;
 			this.item = item;
 			this.left = this.right = AVLTree.NIL;
 			this.height = 1;
@@ -228,6 +242,7 @@ public class Matching
 
 		public AVLNode(LinkedList<Pair> item, AVLNode leftChild, AVLNode rightChild) {
 			this.key = item.key;
+			this.value = item.value;
 			this.item = item;
 			this.left = leftChild;
 			this.right = rightChild;
@@ -237,6 +252,7 @@ public class Matching
 
 		public AVLNode(LinkedList<Pair> item, AVLNode leftChild, AVLNode rightChild, int height) {
 			this.key = item.key;
+			this.value = item.value;
 			this.item = item;
 			this.left = leftChild;
 			this.right = rightChild;
@@ -263,11 +279,11 @@ public class Matching
 			if (currNode == NIL) {
 				return NIL;
 			}
-			if ((x.key).compareTo(currNode.key) == 0) {
+			if ((x.key).equals(currNode.key) && x.value == currNode.value) {
 				return currNode;
-			} else if ((x.key).compareTo(currNode.key) < 0) {
+			} else if (x.value <= currNode.value) {
 				return searchItem(currNode.left, x);
-			} else if ((x.key).compareTo(currNode.key) > 0) {
+			} else if (x.value > currNode.value) {
 				return searchItem(currNode.right, x);
 			}
 			return NIL;
@@ -282,17 +298,17 @@ public class Matching
 			if (currNode == NIL) {
 				currNode = new AVLNode(x);
 			} else {
-				if ((x.key).compareTo(currNode.key) == 0) {
+				if ((x.key).equals(currNode.key) && x.value == currNode.value) {
 					/** key collision **/
 					currNode.item.append(x.first());
-				} else if ((x.key).compareTo(currNode.key) < 0) {
+				} else if (x.value <= currNode.value) {
 					currNode.left = insertItem(currNode.left, x);
 					currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 					int type = needBalance(currNode);
 					if (type != NO_NEED) {
 						currNode = balanceAVL(currNode, type);
 					}
-				} else if ((x.key).compareTo(currNode.key) > 0) {
+				} else if (x.value > currNode.value) {
 					currNode.right = insertItem(currNode.right, x);
 					currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 					int type = needBalance(currNode);
@@ -313,16 +329,16 @@ public class Matching
 			if (currNode == NIL) {
 				return NIL;
 			}
-			if ((x.key).compareTo(currNode.item.key) == 0) {
+			if ((x.key).equals(currNode.key) && x.value == currNode.value) {
 				return deleteNode(currNode);
-			} else if ((x.key).compareTo(currNode.item.key) < 0) {
+			} else if (x.value <= currNode.value) {
 				currNode.left = deleteItem(currNode.left, x);
 				currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 				int type = needBalance(currNode);
 				if (type != NO_NEED) {
 					currNode = balanceAVL(currNode, type);
 				}
-			} else if ((x.key).compareTo(currNode.item.key) > 0) {
+			} else if (x.value > currNode.value) {
 				currNode.right = deleteItem(currNode.right, x);
 				currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 				int type = needBalance(currNode);
