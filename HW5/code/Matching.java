@@ -595,27 +595,30 @@ public class Matching
 			// 데이터 입력 : < (FILENAME)
 			case '<' :
 				initializeHashTable();
-				String FILENAME = input.split("\\s")[1];
+				String FILENAME = input.replaceFirst("<\\s", "");
 				constructCorpus(FILENAME);
 				inputData();
 				return;
 			// 저장된 데이터 출력 : @ (INDEX NUMBER)
 			case '@' :
-				int INDEX_NUMBER = Integer.parseInt(input.split("\\s")[1]);
+				int INDEX_NUMBER = Integer.parseInt(input.replaceFirst("@\\s", ""));
 				printData(INDEX_NUMBER);
 				return;
 			// 패턴 검색 : ? (PATTERN)
 			case '?' :
-				String PATTERN = input.split("\\s")[1];
+				String PATTERN = input.replaceFirst("\\?\\s", "");
 				matchPattern(PATTERN);
 				return;
 			// 문자열 삭제 : / (6의 길이를 가진 문자열)
 			case '/' :
-				String SUBSTRING = input.split("\\s")[1];
+				String SUBSTRING = input.replaceFirst("/\\s", "");
 				removeSubString(SUBSTRING);
+				return;
+			case '+' :
 				// 문장 추가 : + (문장)
-				String SENTENCE = input.split("\\s")[1];
+				String SENTENCE = input.replaceFirst("\\+\\s", "");
 				appendSentence(SENTENCE);
+				return;
 			default :
 				return;
 		}
