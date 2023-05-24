@@ -250,46 +250,46 @@ public class Matching
 			root = NIL;
 		}
 
-		/** 검색 **/
+		/** Search **/
 		public AVLNode search(LinkedList<Pair> x) {
-			return searchItem(root, x);
+			return searchHelp(root, x);
 		}
 
-		private AVLNode searchItem(AVLNode currNode, LinkedList<Pair> x) {
+		private AVLNode searchHelp(AVLNode currNode, LinkedList<Pair> x) {
 			if (currNode == NIL) {
 				return NIL;
 			}
 			if ((x.key).equals(currNode.key) && (x.key).compareTo(currNode.key) == 0) {
 				return currNode;
 			} else if ((x.key).compareTo(currNode.key) < 0) {
-				return searchItem(currNode.left, x);
+				return searchHelp(currNode.left, x);
 			} else if ((x.key).compareTo(currNode.key) > 0) {
-				return searchItem(currNode.right, x);
+				return searchHelp(currNode.right, x);
 			}
 			return NIL;
 		}
 
-		/** 삽입 **/
+		/** Insert **/
 		public void insert(LinkedList<Pair> x) {
-			root = insertItem(root, x);
+			root = insertHelp(root, x);
 		}
 
-		private AVLNode insertItem(AVLNode currNode, LinkedList<Pair> x) {
+		private AVLNode insertHelp(AVLNode currNode, LinkedList<Pair> x) {
 			if (currNode == NIL) {
 				currNode = new AVLNode(x);
 			} else {
+				/** key collision **/
 				if ((x.key).equals(currNode.key) && (x.key).compareTo(currNode.key) == 0) {
-					/** key collision **/
 					currNode.item.append(x.first());
 				} else if ((x.key).compareTo(currNode.key) < 0) {
-					currNode.left = insertItem(currNode.left, x);
+					currNode.left = insertHelp(currNode.left, x);
 					currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 					int type = needBalance(currNode);
 					if (type != NO_NEED) {
 						currNode = balanceAVL(currNode, type);
 					}
 				} else if ((x.key).compareTo(currNode.key) > 0) {
-					currNode.right = insertItem(currNode.right, x);
+					currNode.right = insertHelp(currNode.right, x);
 					currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 					int type = needBalance(currNode);
 					if (type != NO_NEED) {
@@ -300,26 +300,26 @@ public class Matching
 			return currNode;
 		}
 
-		/** 삭제 **/
+		/** Delete **/
 		public void delete(LinkedList<Pair> x) {
-			root = deleteItem(root, x);
+			root = deleteHelp(root, x);
 		}
 
-		public AVLNode deleteItem(AVLNode currNode, LinkedList<Pair> x) {
+		public AVLNode deleteHelp(AVLNode currNode, LinkedList<Pair> x) {
 			if (currNode == NIL) {
 				return NIL;
 			}
 			if ((x.key).equals(currNode.key) && (x.key).compareTo(currNode.key) == 0) {
 				return deleteNode(currNode);
 			} else if ((x.key).compareTo(currNode.key) < 0) {
-				currNode.left = deleteItem(currNode.left, x);
+				currNode.left = deleteHelp(currNode.left, x);
 				currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 				int type = needBalance(currNode);
 				if (type != NO_NEED) {
 					currNode = balanceAVL(currNode, type);
 				}
 			} else if ((x.key).compareTo(currNode.key) > 0) {
-				currNode.right = deleteItem(currNode.right, x);
+				currNode.right = deleteHelp(currNode.right, x);
 				currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 				int type = needBalance(currNode);
 				if (type != NO_NEED) {
@@ -375,7 +375,7 @@ public class Matching
 			return rPair;
 		}
 
-		/** 균형잡기 **/
+		/** Balance **/
 		private AVLNode balanceAVL(AVLNode currNode, int type) {
 			AVLNode returnNode = NIL;
 			switch (type) {
@@ -398,7 +398,7 @@ public class Matching
 			return returnNode;
 		}
 
-		/** 회전 **/
+		/** Rotate **/
 		static final int ILLEGAL = -1, NO_NEED = 0, LL = 1, LR = 2, RR = 3, RL = 4;
 
 		private int needBalance(AVLNode rootNode) {
@@ -421,7 +421,7 @@ public class Matching
 			return type;
 		}
 
-		/** 좌회전 **/
+		/** Left-Rotate **/
 		private AVLNode leftRotate(AVLNode rootNode) {
 			AVLNode RChild = rootNode.right;
 			if (RChild != NIL) {
@@ -434,7 +434,7 @@ public class Matching
 			return RChild;
 		}
 
-		/** 우회전 **/
+		/** Right-Rotate **/
 		private AVLNode rightRotate(AVLNode rootNode) {
 			AVLNode LChild = rootNode.left;
 			if (LChild != NIL) {
@@ -447,7 +447,7 @@ public class Matching
 			return LChild;
 		}
 
-		/** 기타 **/
+		/** Etc **/
 		public boolean isEmpty() {
 			return root == NIL;
 		}
@@ -456,7 +456,7 @@ public class Matching
 			root = NIL;
 		}
 
-		/** 순회 **/
+		/** Traversal **/
 		public LinkedList<AVLNode> preorder() {
 			LinkedList<AVLNode> visited = new LinkedList<AVLNode>();
 			preorderHelp(root, visited);
@@ -576,29 +576,29 @@ public class Matching
 		char mark = input.charAt(0);
 		// TASK2 ) Call function differently depending on mark
 		switch (mark) {
-			// 데이터 입력 : < (FILENAME)
+			// 1. Input Data : < (FILENAME)
 			case '<' :
 				String FILENAME = input.replaceFirst("<\\s", "");
 				constructCorpus(FILENAME);
 				initializeHashTable();
 				constructHashTable();
 				return;
-			// 저장된 데이터 출력 : @ (INDEX NUMBER)
+			// 2. Print Stored Data : @ (INDEX NUMBER)
 			case '@' :
 				int INDEX_NUMBER = Integer.parseInt(input.replaceFirst("@\\s", ""));
 				printData(INDEX_NUMBER);
 				return;
-			// 패턴 검색 : ? (PATTERN)
+			// 3. Search Pattern : ? (PATTERN)
 			case '?' :
 				String PATTERN = input.replaceFirst("\\?\\s", "");
 				matchPattern(PATTERN);
 				return;
-			// 문자열 삭제 : / (6의 길이를 가진 문자열)
+			// 4. Delete Sub-String : / (SUBSTRING)
 			case '/' :
 				String SUBSTRING = input.replaceFirst("/\\s", "");
 				removeSubString(SUBSTRING);
 				return;
-			// 문장 추가 : + (문장)
+			// 5. Append Sentence : + (SENTENCE)
 			case '+' :
 				String SENTENCE = input.replaceFirst("\\+\\s", "");
 				appendSentence(SENTENCE);
@@ -630,7 +630,7 @@ public class Matching
 		}
 	}
 
-	/** 데이터 입력 **/
+	/** 1. Input Data **/
 	private static void constructHashTable() {
 		for (int lineNum = 1; lineNum <= corpus.len(); lineNum++) {
 			int index = lineNum - 1;
@@ -670,7 +670,7 @@ public class Matching
 		}
 	}
 
-	/** 저장된 데이터 출력 **/
+	/** 2. Print Stored Data **/
 	private static void printData(int indexNumber) {
 		// TASK1 ) Get slot in the index number
 		AVLTree slot = hashTable.getSlot(indexNumber);
@@ -692,7 +692,7 @@ public class Matching
 		}
 	}
 
-	/** 패턴 검색 **/
+	/** 3. Search Pattern **/
 	private static void matchPattern(String pattern) {
 		String result = "";
 		for (int lineNum = 1; lineNum <= corpus.len(); lineNum++) {
@@ -737,6 +737,7 @@ public class Matching
 		return detected;
 	}
 
+	/** 4. Remove Sub-String **/
 	private static void removeSubString(String substring) {
 		// TASK1 ) Create linked list which of key is input sub-string
 		LinkedList<Pair> targetPattern = new LinkedList<>(substring);
@@ -757,6 +758,7 @@ public class Matching
 		}
 	}
 
+	/** 5. Append Sentence **/
 	private static void appendSentence(String sentence) {
 		// TASK1 ) Append input sentence in corpus
 		corpus.append(sentence);
