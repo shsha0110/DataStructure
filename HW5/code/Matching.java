@@ -680,11 +680,14 @@ public class Matching
 		String result = "";
 		for (int i = 0; i < nodes.len(); i++) {
 			AVLNode node = nodes.get(i);
-			result += node.item.key + " ";
+			if (i == nodes.len()-1) {
+				result += node.item.key;
+			} else {
+				result += node.item.key + " ";
+			}
+
 		}
-		// TASK4 ) Trim
-		result = result.trim();
-		// TASK5 ) Print
+		// TASK4 ) Print
 		if (result.isEmpty() || result.isBlank()) {
 			System.out.println("EMPTY");
 		} else {
