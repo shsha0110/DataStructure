@@ -578,10 +578,10 @@ public class Matching
 		switch (mark) {
 			// 데이터 입력 : < (FILENAME)
 			case '<' :
-				initializeHashTable();
 				String FILENAME = input.replaceFirst("<\\s", "");
 				constructCorpus(FILENAME);
-				inputData();
+				initializeHashTable();
+				constructHashTable();
 				return;
 			// 저장된 데이터 출력 : @ (INDEX NUMBER)
 			case '@' :
@@ -598,8 +598,8 @@ public class Matching
 				String SUBSTRING = input.replaceFirst("/\\s", "");
 				removeSubString(SUBSTRING);
 				return;
+			// 문장 추가 : + (문장)
 			case '+' :
-				// 문장 추가 : + (문장)
 				String SENTENCE = input.replaceFirst("\\+\\s", "");
 				appendSentence(SENTENCE);
 				return;
@@ -631,7 +631,7 @@ public class Matching
 	}
 
 	/** 데이터 입력 **/
-	private static void inputData() {
+	private static void constructHashTable() {
 		for (int lineNum = 1; lineNum <= corpus.len(); lineNum++) {
 			int index = lineNum - 1;
 			// TASK1 ) Get line
@@ -644,13 +644,17 @@ public class Matching
 	}
 
 	private static String[] sliceSubStrings(String line, int subStringLength) {
-		// TASK1 ) Initialize sub-string array
+		// TASK1 ) Return empty array if length of input line is smaller than 6
+		if (line.length() < 6) {
+			return new String[0];
+		}
+		// TASK2 ) Initialize sub-string array
 		String[] subStrings = new String[line.length() - subStringLength + 1];
-		// TASK2 )
+		// TASK3 )
 		for (int i = 0; i <= line.length() - subStringLength; i++) {
-			// TASK2.1 ) Slice sub-string
+			// TASK3.1 ) Slice sub-string
 			String subString = line.substring(i, i + subStringLength);
-			// TASK2.2 ) Append
+			// TASK3.2 ) Append
 			subStrings[i] = subString;
 		}
 		return subStrings;
@@ -734,6 +738,23 @@ public class Matching
 	}
 
 	private static void removeSubString(String substring) {
+		// TASK1 ) Create linked list which of key is input sub-string
+		LinkedList<Pair> targetPattern = new LinkedList<>(substring);
+		// TASK2 ) Search AVLNode which of key is input sub-string
+		AVLNode nodes = hashTable.search(targetPattern);
+		// TASK3 ) Remove input sub-string in corpus
+		removeSubStringInCorpus(substring);
+		// TASK4 ) Reconstruct hash table
+		initializeHashTable();
+		constructHashTable();
+		System.out.println(nodes.item.len());
+	}
+
+	private static void removeSubStringInCorpus(String substring) {
+		for (int i = 0; i < corpus.len(); i++) {
+			String updatedSentence = corpus.get(i).replace(substring, "");
+			corpus.set(i, updatedSentence);
+		}
 	}
 
 	private static void appendSentence(String sentence) {
