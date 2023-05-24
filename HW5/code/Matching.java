@@ -275,11 +275,11 @@ public class Matching
 			if (currNode == NIL) {
 				return NIL;
 			}
-			if ((x.key).equals(currNode.key) && x.value == currNode.value) {
+			if ((x.key).equals(currNode.key) && (x.key).compareTo(currNode.key) == 0) {
 				return currNode;
-			} else if (x.value <= currNode.value) {
+			} else if ((x.key).compareTo(currNode.key) < 0) {
 				return searchItem(currNode.left, x);
-			} else if (x.value > currNode.value) {
+			} else if ((x.key).compareTo(currNode.key) > 0) {
 				return searchItem(currNode.right, x);
 			}
 			return NIL;
@@ -294,17 +294,17 @@ public class Matching
 			if (currNode == NIL) {
 				currNode = new AVLNode(x);
 			} else {
-				if ((x.key).equals(currNode.key) && x.value == currNode.value) {
+				if ((x.key).equals(currNode.key) && (x.key).compareTo(currNode.key) == 0) {
 					/** key collision **/
 					currNode.item.append(x.first());
-				} else if (x.value <= currNode.value) {
+				} else if ((x.key).compareTo(currNode.key) < 0) {
 					currNode.left = insertItem(currNode.left, x);
 					currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 					int type = needBalance(currNode);
 					if (type != NO_NEED) {
 						currNode = balanceAVL(currNode, type);
 					}
-				} else if (x.value > currNode.value) {
+				} else if ((x.key).compareTo(currNode.key) > 0) {
 					currNode.right = insertItem(currNode.right, x);
 					currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 					int type = needBalance(currNode);
@@ -325,16 +325,16 @@ public class Matching
 			if (currNode == NIL) {
 				return NIL;
 			}
-			if ((x.key).equals(currNode.key) && x.value == currNode.value) {
+			if ((x.key).equals(currNode.key) && (x.key).compareTo(currNode.key) == 0) {
 				return deleteNode(currNode);
-			} else if (x.value <= currNode.value) {
+			} else if ((x.key).compareTo(currNode.key) < 0) {
 				currNode.left = deleteItem(currNode.left, x);
 				currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 				int type = needBalance(currNode);
 				if (type != NO_NEED) {
 					currNode = balanceAVL(currNode, type);
 				}
-			} else if (x.value > currNode.value) {
+			} else if ((x.key).compareTo(currNode.key) > 0) {
 				currNode.right = deleteItem(currNode.right, x);
 				currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 				int type = needBalance(currNode);
