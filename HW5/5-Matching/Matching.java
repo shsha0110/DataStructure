@@ -5,7 +5,7 @@ public class Matching
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Inner Class1 : Pair **/
-	public static class Pair implements Comparable {
+	public static class Pair implements Comparable<Pair> {
 		public int lineNum, startPoint;
 
 		public Pair(int lineNum, int startPoint) {
@@ -19,8 +19,7 @@ public class Matching
 		}
 
 		@Override
-		public int compareTo(Object o) {
-			Pair pair = (Pair) o;
+		public int compareTo(Pair pair) {
 			if (lineNum != pair.lineNum) {
 				return lineNum > pair.lineNum ? 1 : -1;
 			}
@@ -29,6 +28,7 @@ public class Matching
 			}
 			return 0;
 		}
+
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Inner Class2 : Node **/
@@ -204,7 +204,6 @@ public class Matching
 			return head.getNext().getItem();
 		}
 
-		@Override
 		public int compareTo(Object o) {
 			LinkedList<T> obj = (LinkedList<T>) o;
 			return key.compareTo(obj.key);
@@ -212,25 +211,29 @@ public class Matching
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Inner Class4 : AVLNode **/
-	public static class AVLNode<T> {
-		public LinkedList<T> item;
-		public AVLNode<T> left, right;
+	public static class AVLNode {
+		public String key;
+		public LinkedList<Pair> item;
+		public AVLNode left, right;
 		public int height;
 
-		public AVLNode(LinkedList<T> item) {
+		public AVLNode(LinkedList<Pair> item) {
+			this.key = item.key;
 			this.item = item;
-			this.left = this.right = NIL;
+			this.left = this.right = AVLTree.NIL;
 			this.height = 1;
 		}
 
-		public AVLNode(LinkedList<T> item, AVLNode leftChild, AVLNode rightChild) {
+		public AVLNode(LinkedList<Pair> item, AVLNode leftChild, AVLNode rightChild) {
+			this.key = item.key;
 			this.item = item;
 			this.left = leftChild;
 			this.right = rightChild;
 			this.height = 1;
 		}
 
-		public AVLNode(LinkedList<T> item, AVLNode leftChild, AVLNode rightChild, int height) {
+		public AVLNode(LinkedList<Pair> item, AVLNode leftChild, AVLNode rightChild, int height) {
+			this.key = item.key;
 			this.item = item;
 			this.left = leftChild;
 			this.right = rightChild;
@@ -239,52 +242,53 @@ public class Matching
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Inner Class5 : AVLTree **/
-	public static class AVLTree<T> {
-		private AVLNode<T> root;
+	public static class AVLTree {
+		private AVLNode root;
+		static final AVLNode NIL = new AVLNode(new LinkedList<Pair>(), null, null, 0);
 
 		public AVLTree() {
 			root = NIL;
 		}
 
 		/** Search **/
-		public AVLNode search(LinkedList<T> x) {
+		public AVLNode search(LinkedList<Pair> x) {
 			return searchHelp(root, x);
 		}
 
-		private AVLNode searchHelp(AVLNode<T> currNode, LinkedList<T> x) {
+		private AVLNode searchHelp(AVLNode currNode, LinkedList<Pair> x) {
 			if (currNode == NIL) {
 				return NIL;
 			}
-			if ((x.key).equals(currNode.item.key) && (x.key).compareTo(currNode.item.key) == 0) {
+			if ((x.key).equals(currNode.key) && (x.key).compareTo(currNode.key) == 0) {
 				return currNode;
-			} else if ((x.key).compareTo(currNode.item.key) < 0) {
+			} else if ((x.key).compareTo(currNode.key) < 0) {
 				return searchHelp(currNode.left, x);
-			} else if ((x.key).compareTo(currNode.item.key) > 0) {
+			} else if ((x.key).compareTo(currNode.key) > 0) {
 				return searchHelp(currNode.right, x);
 			}
 			return NIL;
 		}
 
 		/** Insert **/
-		public void insert(LinkedList<T> x) {
+		public void insert(LinkedList<Pair> x) {
 			root = insertHelp(root, x);
 		}
 
-		private AVLNode insertHelp(AVLNode<T> currNode, LinkedList<T> x) {
+		private AVLNode insertHelp(AVLNode currNode, LinkedList<Pair> x) {
 			if (currNode == NIL) {
 				currNode = new AVLNode(x);
 			} else {
 				/** key collision **/
-				if ((x.key).equals(currNode.item.key) && (x.key).compareTo(currNode.item.key) == 0) {
+				if ((x.key).equals(currNode.key) && (x.key).compareTo(currNode.key) == 0) {
 					currNode.item.append(x.first());
-				} else if ((x.key).compareTo(currNode.item.key) < 0) {
+				} else if ((x.key).compareTo(currNode.key) < 0) {
 					currNode.left = insertHelp(currNode.left, x);
 					currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 					int type = needBalance(currNode);
 					if (type != NO_NEED) {
 						currNode = balanceAVL(currNode, type);
 					}
-				} else if ((x.key).compareTo(currNode.item.key) > 0) {
+				} else if ((x.key).compareTo(currNode.key) > 0) {
 					currNode.right = insertHelp(currNode.right, x);
 					currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 					int type = needBalance(currNode);
@@ -297,24 +301,24 @@ public class Matching
 		}
 
 		/** Delete **/
-		public void delete(LinkedList<T> x) {
+		public void delete(LinkedList<Pair> x) {
 			root = deleteHelp(root, x);
 		}
 
-		public AVLNode deleteHelp(AVLNode<T> currNode, LinkedList<T> x) {
+		public AVLNode deleteHelp(AVLNode currNode, LinkedList<Pair> x) {
 			if (currNode == NIL) {
 				return NIL;
 			}
-			if ((x.key).equals(currNode.item.key) && (x.key).compareTo(currNode.item.key) == 0) {
+			if ((x.key).equals(currNode.key) && (x.key).compareTo(currNode.key) == 0) {
 				return deleteNode(currNode);
-			} else if ((x.key).compareTo(currNode.item.key) < 0) {
+			} else if ((x.key).compareTo(currNode.key) < 0) {
 				currNode.left = deleteHelp(currNode.left, x);
 				currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 				int type = needBalance(currNode);
 				if (type != NO_NEED) {
 					currNode = balanceAVL(currNode, type);
 				}
-			} else if ((x.key).compareTo(currNode.item.key) > 0) {
+			} else if ((x.key).compareTo(currNode.key) > 0) {
 				currNode.right = deleteHelp(currNode.right, x);
 				currNode.height = 1 + Math.max(currNode.left.height, currNode.right.height);
 				int type = needBalance(currNode);
@@ -325,7 +329,7 @@ public class Matching
 			return currNode;
 		}
 
-		private AVLNode deleteNode(AVLNode<T> currNode) {
+		private AVLNode deleteNode(AVLNode currNode) {
 			if (currNode.left == NIL && currNode.right == NIL) {
 				return NIL;
 			} else if (currNode.left != NIL && currNode.right == NIL) {
@@ -347,16 +351,16 @@ public class Matching
 		}
 
 		public class returnPair {
-			LinkedList item;
+			LinkedList<Pair> item;
 			AVLNode node;
 
-			public returnPair(LinkedList item, AVLNode node) {
+			public returnPair(LinkedList<Pair> item, AVLNode node) {
 				this.item = item;
 				this.node = node;
 			}
 		}
 
-		private returnPair deleteMinItem(AVLNode<T> currNode) {
+		private returnPair deleteMinItem(AVLNode currNode) {
 			if (currNode.left == NIL) {
 				return new returnPair(currNode.item, currNode.right);
 			}
@@ -443,6 +447,15 @@ public class Matching
 			return LChild;
 		}
 
+		/** Etc **/
+		public boolean isEmpty() {
+			return root == NIL;
+		}
+
+		public void clear() {
+			root = NIL;
+		}
+
 		/** Traversal **/
 		public LinkedList<AVLNode> preorder() {
 			LinkedList<AVLNode> visited = new LinkedList<AVLNode>();
@@ -465,14 +478,6 @@ public class Matching
 			visited.append(currNode);
 		}
 
-		/** Etc **/
-		public boolean isEmpty() {
-			return root == NIL;
-		}
-
-		public void clear() {
-			root = NIL;
-		}
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Inner Class6 : HashTable **/
@@ -541,7 +546,6 @@ public class Matching
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Main **/
-	public static final AVLNode NIL = new AVLNode(new LinkedList(), null, null, 0);
 	public static HashTable hashTable;
 	public static LinkedList<String> corpus;
 
@@ -560,7 +564,6 @@ public class Matching
 			}
 			catch (IOException e)
 			{
-				
 			}
 		}
 	}
