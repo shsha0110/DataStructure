@@ -7,7 +7,7 @@ import java.util.*;
 public class Subway {
 
     public static List<Station> Stations = new ArrayList<>();
-    public static Map<String, List<Neighbor>> Neighbors = new HashMap<>();
+    public static Map<String, List<Edge>> Neighbors = new HashMap<>();
     public static final int INF = Integer.MAX_VALUE;
 
     public static void main(String[] args) {
@@ -75,7 +75,7 @@ public class Subway {
             // TASK3 ) Add Station object in Stations
             Stations.add(newStation);
             // TASK4 ) Add Station id in Neighbors as key, and initialize value
-            Neighbors.put(newStation.id, new ArrayList<Neighbor>());
+            Neighbors.put(newStation.id, new ArrayList<Edge>());
         }
     }
 
@@ -87,9 +87,9 @@ public class Subway {
             String arrivalsID = data[1];
             int duration = Integer.parseInt(data[2]);
             // TASK2 ) Create Neighbor object
-            Neighbor newNeighbor = new Neighbor(departuresID, arrivalsID, duration);
+            Edge neighbor = new Edge(departuresID, arrivalsID, duration);
             // TASK3 ) Add Neighbor object in Neighbors
-            Neighbors.get(departuresID).add(newNeighbor);
+            Neighbors.get(departuresID).add(neighbor);
         }
     }
 
@@ -106,19 +106,20 @@ public class Subway {
         }
     }
 
+
     /** 4. Process command **/
     private static void command(String input) {
         // TASK1 ) Parsing input, departures and arrivals
-        Neighbor pair = parseInput(input);
+        Edge pair = parseInput(input);
         // TASK2 ) Find the shortest path using Dijkstra algorithm
-        Stack<Neighbor> shortestPath = findShortestPath(pair);
+        Stack<Edge> shortestPath = findShortestPath(pair);
         // TASK3 ) Print path
         printPath(shortestPath);
         // TASK4 ) Print duration
         printDuration(shortestPath);
     }
 
-    private static Neighbor parseInput(String input) {
+    private static Edge parseInput(String input) {
         // TASK1 ) Split input, delimited by a space
         String[] stationNames = input.split("\\s");
         String departuresName = stationNames[0];
@@ -126,28 +127,28 @@ public class Subway {
         // TASK2 ) Find Station object corresponding to station name
         Station departures = findStationByName(departuresName);
         Station arrivals = findStationByName(arrivalsName);
-        // TASK3 ) Create Neighbor object
-        Neighbor pair = new Neighbor(departures.id, arrivals.id);
+        // TASK3 ) Create Edge object
+        Edge pair = new Edge(departures.id, arrivals.id);
         return pair;
     }
 
-    private static Stack<Neighbor> findShortestPath(Neighbor pair) {
+    private static Stack<Edge> findShortestPath(Edge pair) {
         Station departures = findStationByID(pair.departuresID);
         Station arrivals = findStationByID(pair.arrivalsID);
-        Stack<Neighbor> shortedPath = dijkstra(departures, arrivals);
+        Stack<Edge> shortedPath = dijkstra(departures, arrivals);
         return shortedPath;
     }
 
-    private static Stack<Neighbor> dijkstra(Station departures, Station arrivals) {
+    private static Stack<Edge> dijkstra(Station departures, Station arrivals) {
         Map<Station, Boolean> visited = new HashMap<>();
         Map<Station, Integer> distance = new HashMap<>();
-        Map<Station, Stack<Neighbor>> path = new HashMap<>();
+        Map<Station, Stack<Edge>> path = new HashMap<>();
 
         for (Station station : Stations) {
             visited.put(station, false);
             distance.put(station, INF);
-            Stack<Neighbor> pathStack = new Stack<>();
-            pathStack.push(new Neighbor(null, null, Integer.MIN_VALUE));
+            Stack<Edge> pathStack = new Stack<>();
+            pathStack.push(new Edge(null, null, Integer.MIN_VALUE));
             path.put(station, pathStack);
         }
 
@@ -156,12 +157,12 @@ public class Subway {
         return path.get(arrivals);
     }
 
-    private static void dijkstraHelp(Station departures, Station arrivals, Map<Station, Boolean> visited, Map<Station, Integer> distance, Map<Station, Stack<Neighbor>> path) {
+    private static void dijkstraHelp(Station departures, Station arrivals, Map<Station, Boolean> visited, Map<Station, Integer> distance, Map<Station, Stack<Edge>> path) {
         visited.put(departures, true);
         distance.put(departures, 0);
 
-        List<Neighbor> neighborsOfDepartures = Neighbors.get(departures.id);
-        for (Neighbor neighbor : neighborsOfDepartures) {
+        List<Edge> neighborsOfDepartures = Neighbors.get(departures.id);
+        for (Edge neighbor : neighborsOfDepartures) {
             Station neighborStation = findStationByID(neighbor.arrivalsID);
             distance.put(neighborStation, neighbor.duration);
         }
@@ -176,8 +177,8 @@ public class Subway {
                 return;
             }
 
-            List<Neighbor> neighborsOfCurrentStation = Neighbors.get(currStation.id);
-            for (Neighbor neighbor : neighborsOfCurrentStation) {
+            List<Edge> neighborsOfCurrentStation = Neighbors.get(currStation.id);
+            for (Edge neighbor : neighborsOfCurrentStation) {
                 Station neighborStation = findStationByID(neighbor.arrivalsID);
                 int cost = distance.get(currStation) + neighbor.duration;
                 if (cost < distance.get(neighborStation)) {
@@ -185,7 +186,7 @@ public class Subway {
                     path.get(neighborStation).pop();
                     path.get(neighborStation).push(neighbor);
                 } else {
-                    path.get(neighborStation).push(new Neighbor(null, null, Integer.MIN_VALUE));
+                    path.get(neighborStation).push(new Edge(null, null, Integer.MIN_VALUE));
                 }
             }
         }
@@ -203,10 +204,10 @@ public class Subway {
         return closestStation;
     }
 
-    private static void printPath(Stack<Neighbor> shortestPath) {
-        List<Neighbor> path = new ArrayList<>(shortestPath);
+    private static void printPath(Stack<Edge> shortestPath) {
+        List<Edge> path = new ArrayList<>(shortestPath);
         String result = findStationByID(path.get(0).arrivalsID).name;
-        for (Neighbor log : path) {
+        for (Edge log : path) {
             if (log.departuresID == null || log.arrivalsID == null) {
                 continue;
             }
@@ -223,10 +224,10 @@ public class Subway {
         System.out.println(result);
     }
 
-    private static void printDuration(Stack<Neighbor> shortestPath) {
-        List<Neighbor> path = new ArrayList<>(shortestPath);
+    private static void printDuration(Stack<Edge> shortestPath) {
+        List<Edge> path = new ArrayList<>(shortestPath);
         int result = 0;
-        for (Neighbor log : path) {
+        for (Edge log : path) {
             if (log.duration < 0) {
                 continue;
             }
