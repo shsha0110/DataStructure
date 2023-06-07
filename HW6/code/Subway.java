@@ -20,9 +20,9 @@ public class Subway {
         // TASK2 ) Build Neighbors
         List<String[]> neighborData = data[1];
         buildNeighbors(neighborData);
-        // TASK3 ) Update transfer time
-        List<String[]> transferTimeData = data[2];
-        updateTransferTime(transferTimeData);
+        // TASK3 ) Update transfer data
+        List<String[]> transferData = data[2];
+        updateTransfer(transferData);
         // TASK3 ) Read input
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         // TASK4 ) Process input
@@ -94,18 +94,54 @@ public class Subway {
     }
 
     /** 3. Update Transfer Time **/
-    private static void updateTransferTime(List<String[]> transferTimeData) {
-        for (String[] data : transferTimeData) {
+    private static void updateTransfer(List<String[]> transferData) {
+        // TASK1 ) Update isTransferStation
+        updateIsTransferStation();
+        // TASK2 ) Update transfer time
+        updateTransferTime(transferData);
+        // TASK3 ) Connect between transfer station with the same name
+        updateTransferEdge();
+    }
+
+    private static void updateIsTransferStation() {
+        for (Station station : Stations) {
+            List<Station> stationsWithSameName = findStationByName(station.name);
+            if (stationsWithSameName.size() >= 2) {
+                // TASK1 ) Update isTransferStation
+                station.isTransferStation = true;
+                // TASK2 ) Set default transfer time as 5
+                station.transferTime = 5;
+            }
+        }
+    }
+
+    private static void updateTransferTime(List<String[]> transferData) {
+        for (String[] data : transferData) {
             // TASK1 ) Segregate data
             String stationName = data[0];
             int transferTime = Integer.parseInt(data[1]);
             // TASK2 ) Find station by name
-            Station station = findStationByName(stationName);
-            // TASK3 ) Update transfer time
-            station.transferTime = transferTime;
+            List<Station> stationWithSameName = findStationByName(stationName);
+            for (Station station : stationWithSameName) {
+                // TASK3 ) Update transfer time
+                station.transferTime = transferTime;
+            }
         }
     }
 
+    private static void updateTransferEdge() {
+        for (Station station : Stations) {
+            List<Station> stationsWithSameName = findStationByName(station.name);
+            if (stationsWithSameName.size() >= 2) {
+                for (Station stationWithSameName : stationsWithSameName) {
+                    if (!station.equals(stationWithSameName)) {
+                        // TASK ) Create edge between transfer stations that have the same name, and set transfer time
+                        Neighbors.get(station.id).add(new Edge(station.id, stationWithSameName.id, station.transferTime));
+                    }
+                }
+            }
+        }
+    }
 
     /** 4. Process command **/
     private static void command(String input) {
@@ -125,8 +161,8 @@ public class Subway {
         String departuresName = stationNames[0];
         String arrivalsName = stationNames[1];
         // TASK2 ) Find Station object corresponding to station name
-        Station departures = findStationByName(departuresName);
-        Station arrivals = findStationByName(arrivalsName);
+        Station departures = findStationByName(departuresName).get(0);
+        Station arrivals = findStationByName(arrivalsName).get(0);
         // TASK3 ) Create Edge object
         Edge pair = new Edge(departures.id, arrivals.id);
         return pair;
@@ -237,13 +273,14 @@ public class Subway {
     }
 
     /** 5. etc **/
-    private static Station findStationByName(String stationName) {
+    private static List<Station> findStationByName(String stationName) {
+        List<Station> result = new ArrayList<>();
         for (Station station : Stations) {
             if (stationName.equals(station.name)) {
-                return station;
+                result.add(station);
             }
         }
-        return null;
+        return result;
     }
 
     private static Station findStationByID(String stationID) {

@@ -4,19 +4,14 @@ public class Station {
     public String name;
     public String line;
     public int transferTime;
-
-    public Station (String id, String name, String line, int transferTime) {
-        this.id = id;
-        this.name = name;
-        this.line = line;
-        this.transferTime = transferTime;
-    }
+    public boolean isTransferStation;
 
     public Station (String id, String name, String line) {
         this.id = id;
         this.name = name;
         this.line = line;
-        this.transferTime = 5;
+        this.transferTime = Integer.MAX_VALUE;
+        this.isTransferStation = false;
     }
 
     @Override
