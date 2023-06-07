@@ -228,13 +228,27 @@ public class Subway {
 
     private static void printPath(Station[] pair, Map<Station, Edge> shortestPath) {
         Station departures = pair[0], arrivals = pair[1];
-        String result = arrivals.name;
+        String result = "";
+        Station currStation = arrivals;
+        // 도착역이 환승역인 경우, 환승하지 않고 도착한 것으로 처리
         for (int i = 0; i < shortestPath.size(); i++) {
-            Edge currEdge = shortestPath.get(arrivals);
+            Edge currEdge = shortestPath.get(currStation);
+            Station prevStation = findStationByID(currEdge.departuresID);
+            if (prevStation.name.equals(arrivals.name)) {
+                result = prevStation.name;
+                currStation = prevStation;
+            } else {
+                break;
+            }
+        }
+
+        for (int i = 0; i < shortestPath.size(); i++) {
+            Edge currEdge = shortestPath.get(currStation);
             Station prevStation = findStationByID(currEdge.departuresID);
             result = String.format("%s ", prevStation.name) + result;
-            if (prevStation.equals(departures)) break;
-            else arrivals = prevStation;
+            // 출발역이 환승역인 경우, 환승을 했다고 생각하고 처리
+            if (prevStation.name.equals(departures.name)) break;
+            currStation = prevStation;
         }
         System.out.println(result);
     }
@@ -242,12 +256,25 @@ public class Subway {
     private static void printDuration(Station[] pair, Map<Station, Edge> shortestPath) {
         Station departures = pair[0], arrivals = pair[1];
         int result = 0;
+        Station currStation = arrivals;
+        // 도착역이 환승역인 경우, 환승하지 않고 도착한 것으로 처리
         for (int i = 0; i < shortestPath.size(); i++) {
-            Edge currEdge = shortestPath.get(arrivals);
+            Edge currEdge = shortestPath.get(currStation);
+            Station prevStation = findStationByID(currEdge.departuresID);
+            if (prevStation.name.equals(arrivals.name)) {
+                currStation = prevStation;
+            } else {
+                break;
+            }
+        }
+
+        for (int i = 0; i < shortestPath.size(); i++) {
+            Edge currEdge = shortestPath.get(currStation);
             Station prevStation = findStationByID(currEdge.departuresID);
             result += currEdge.duration;
-            if (prevStation.equals(departures)) break;
-            else arrivals = prevStation;
+            // 출발역이 환승역인 경우, 환승을 했다고 생각하고 처리
+            if (prevStation.name.equals(departures.name)) break;
+            currStation = prevStation;
         }
         System.out.println(result);
     }
