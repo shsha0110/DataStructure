@@ -12,16 +12,17 @@ public class Subway {
 
     public static void main(String[] args) {
         // TASK1 ) Process subway line data
-        String targetFilePath = args.length == 1 ? args[0] : "";
-        List<String[]>[] data = processSubwayLineData(targetFilePath);
+        String targetFilePath = args[0];
+        System.out.println(targetFilePath);
+        List<List<String[]>> data = processSubwayLineData(targetFilePath);
         // TASK1 ) Build Stations
-        List<String[]> stationData = data[0];
+        List<String[]> stationData = data.get(0);
         buildStations(stationData);
         // TASK2 ) Build Neighbors
-        List<String[]> neighborData = data[1];
+        List<String[]> neighborData = data.get(1);
         buildNeighbors(neighborData);
         // TASK3 ) Update transfer data
-        List<String[]> transferData = data[2];
+        List<String[]> transferData = data.get(2);
         updateTransfer(transferData);
         // TASK3 ) Read input
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -37,9 +38,9 @@ public class Subway {
     }
 
     /** 0. Process data **/
-    private static List<String[]>[] processSubwayLineData(String targetFilePath) {
+    private static List<List<String[]>> processSubwayLineData(String targetFilePath) {
         // TASK1 ) Initialize array of data list
-        List<String[]>[] data = (List<String[]>[]) new Object[3];
+        List<List<String[]>> data = new ArrayList<List<String[]>>();
         // TASK2 ) Open file
         File dataFile = new File(targetFilePath);
         // TASK2 ) Read file
@@ -55,7 +56,7 @@ public class Subway {
                 // TASK2.2 ) Split a line as three tokens(id-name-line)
                 String[] information = line.split("\\s");
                 // TASK2.3 ) Add information in list
-                data[paragraph].add(information);
+                data.get(paragraph).add(information);
             }
         } catch (IOException e) {
 
@@ -148,7 +149,7 @@ public class Subway {
         // TASK1 ) Parsing input, departures and arrivals
         Edge pair = parseInput(input);
         // TASK2 ) Find the shortest path using Dijkstra algorithm
-        Stack<Edge> shortestPath = findShortestPath(pair);
+        LinkedList<Edge> shortestPath = findShortestPath(pair);
         // TASK3 ) Print path
         printPath(shortestPath);
         // TASK4 ) Print duration
@@ -168,24 +169,22 @@ public class Subway {
         return pair;
     }
 
-    private static Stack<Edge> findShortestPath(Edge pair) {
+    private static LinkedList<Edge> findShortestPath(Edge pair) {
         Station departures = findStationByID(pair.departuresID);
         Station arrivals = findStationByID(pair.arrivalsID);
-        Stack<Edge> shortedPath = dijkstra(departures, arrivals);
+        LinkedList<Edge> shortedPath = dijkstra(departures, arrivals);
         return shortedPath;
     }
 
-    private static Stack<Edge> dijkstra(Station departures, Station arrivals) {
+    private static LinkedList<Edge> dijkstra(Station departures, Station arrivals) {
         Map<Station, Boolean> visited = new HashMap<>();
         Map<Station, Integer> distance = new HashMap<>();
-        Map<Station, Stack<Edge>> path = new HashMap<>();
+        Map<Station, LinkedList<Edge>> path = new HashMap<>();
 
         for (Station station : Stations) {
             visited.put(station, false);
             distance.put(station, INF);
-            Stack<Edge> pathStack = new Stack<>();
-            pathStack.push(new Edge(null, null, Integer.MIN_VALUE));
-            path.put(station, pathStack);
+            path.put(station, new LinkedList<Edge>());
         }
 
         dijkstraHelp(departures, arrivals, visited, distance, path);
@@ -193,21 +192,14 @@ public class Subway {
         return path.get(arrivals);
     }
 
-    private static void dijkstraHelp(Station departures, Station arrivals, Map<Station, Boolean> visited, Map<Station, Integer> distance, Map<Station, Stack<Edge>> path) {
+    private static void dijkstraHelp(Station departures, Station arrivals, Map<Station, Boolean> visited, Map<Station, Integer> distance, Map<Station, LinkedList<Edge>> path) {
         visited.put(departures, true);
         distance.put(departures, 0);
 
-        List<Edge> neighborsOfDepartures = Neighbors.get(departures.id);
-        for (Edge neighbor : neighborsOfDepartures) {
-            Station neighborStation = findStationByID(neighbor.arrivalsID);
-            distance.put(neighborStation, neighbor.duration);
-        }
-
-        for (int trials = 0; trials < Stations.size()-1; trials++) {
-            Station currStation = closestStation(visited, distance);
+        Station currStation = null;
+        for (int trials = 0; trials < Stations.size(); trials++) {
+            currStation = closestStation(visited, distance);
             visited.put(currStation, true);
-
-            System.out.println(currStation.name);
 
             if (currStation.equals(arrivals)) {
                 return;
@@ -219,10 +211,9 @@ public class Subway {
                 int cost = distance.get(currStation) + neighbor.duration;
                 if (cost < distance.get(neighborStation)) {
                     distance.put(neighborStation, cost);
-                    path.get(neighborStation).pop();
+                    LinkedList<Edge> temp = path.get(currStation);
+                    path.put(neighborStation, temp);
                     path.get(neighborStation).push(neighbor);
-                } else {
-                    path.get(neighborStation).push(new Edge(null, null, Integer.MIN_VALUE));
                 }
             }
         }
@@ -240,33 +231,28 @@ public class Subway {
         return closestStation;
     }
 
-    private static void printPath(Stack<Edge> shortestPath) {
+    private static void printPath(LinkedList<Edge> shortestPath) {
         List<Edge> path = new ArrayList<>(shortestPath);
-        String result = findStationByID(path.get(0).arrivalsID).name;
+        String result = findStationByID(path.get(0).departuresID).name;
         for (Edge log : path) {
-            if (log.departuresID == null || log.arrivalsID == null) {
-                continue;
-            }
             Station departures = findStationByID(log.departuresID);
             Station arrivals = findStationByID(log.arrivalsID);
-            String departuresLine = departures.line;
-            String arrivalsLine = arrivals.line;
-            if (!departuresLine.equals(arrivalsLine)) {
-                result += String.format(" [%s]", arrivals.name);
-            } else {
-                result += String.format(" %s", arrivals.name);
-            }
+            result += String.format(" %s", arrivals.name);
+//            String departuresLine = departures.line;
+//            String arrivalsLine = arrivals.line;
+//            if (!departuresLine.equals(arrivalsLine)) {
+//                result += String.format(" [%s]", arrivals.name);
+//            } else {
+//                result += String.format(" %s", arrivals.name);
+//            }
         }
         System.out.println(result);
     }
 
-    private static void printDuration(Stack<Edge> shortestPath) {
+    private static void printDuration(LinkedList<Edge> shortestPath) {
         List<Edge> path = new ArrayList<>(shortestPath);
         int result = 0;
         for (Edge log : path) {
-            if (log.duration < 0) {
-                continue;
-            }
             result += log.duration;
         }
         System.out.println(result);
