@@ -187,43 +187,50 @@ public class Subway {
     }
 
     private static void dijkstra(Station departures, Station arrivals, Map<Station, Boolean> visited,
-                                     Map<Station, Integer> distance, Map<Station, Edge> path) {
-        // TASK1 ) Set distance of departures as 0
+                                 Map<Station, Integer> distance, Map<Station, Edge> path) {
+        // Set the initial distance of the departure station to 0
         distance.put(departures, 0);
-        // TASK2 ) Iterate until current station is arrivals
-        Station currStation = null;
-        for (int trials = 0; trials < Stations.size(); trials++) {
-            // TASK2.1 ) Find the closest station among unvisited stations
-            currStation = closestStation(visited, distance);
-            // TASK2.2 ) Update currStation visited log as true
+
+        // Create a priority queue (min heap) to store stations, using a custom comparator to sort by distance
+        PriorityQueue<Station> minDistanceStations = new PriorityQueue<>((Station a, Station b) -> distance.get(a) - distance.get(b));
+
+        // Add the departure station to the queue
+        minDistanceStations.add(departures);
+
+        // Continue this loop until the queue is empty
+        while (!minDistanceStations.isEmpty()) {
+            // Take out the station with the shortest distance
+            Station currStation = minDistanceStations.poll();
+
+            // Skip if the station has been visited
+            if (visited.get(currStation)) continue;
+
+            // Mark the current station as visited
             visited.put(currStation, true);
-            // TASK2.3 ) Check stop condition
+
+            // If the current station is the destination, we've found the shortest path
             if (currStation.equals(arrivals)) {
                 return;
             }
-            // TASK2.4 ) Update distance of neighbor stations of current station
+
+            // Get all neighboring stations of the current station
             List<Edge> neighborsOfCurrentStation = Neighbors.get(currStation.id);
             for (Edge neighbor : neighborsOfCurrentStation) {
                 Station neighborStation = findStationByID(neighbor.arrivalsID);
+
+                // Calculate the cost of the path through the current station
                 int cost = distance.get(currStation) != INF && neighbor.duration != INF ? distance.get(currStation) + neighbor.duration : INF;
+
+                // If this cost is less than the previous cost to get to the neighboring station, update it
                 if (cost < distance.get(neighborStation)) {
                     distance.put(neighborStation, cost);
                     path.put(neighborStation, neighbor);
+
+                    // Add the neighboring station to the queue
+                    minDistanceStations.add(neighborStation);
                 }
             }
         }
-    }
-
-    private static Station closestStation(Map<Station, Boolean> visited, Map<Station, Integer> distance) {
-        int minCost = INF;
-        Station closestStation = null;
-        for (Station station : Stations) {
-            if ((!visited.get(station)) && (distance.get(station) < minCost)) {
-                minCost = distance.get(station);
-                closestStation = station;
-            }
-        }
-        return closestStation;
     }
 
     private static void printPath(Station[] pair, Map<Station, Edge> shortestPath) {
