@@ -235,19 +235,34 @@ public class Subway {
             Edge currEdge = shortestPath.get(currStation);
             Station prevStation = findStationByID(currEdge.departuresID);
             if (prevStation.name.equals(arrivals.name)) {
-                result = prevStation.name;
                 currStation = prevStation;
             } else {
                 break;
             }
         }
 
+        boolean transferred = false;
         for (int i = 0; i < shortestPath.size(); i++) {
             Edge currEdge = shortestPath.get(currStation);
             Station prevStation = findStationByID(currEdge.departuresID);
-            result = String.format("%s ", prevStation.name) + result;
+            // 환승하는 경우
+            if (currStation.name.equals(prevStation.name) && !currStation.line.equals(prevStation.line)) {
+                result = String.format("[%s] ", currStation.name) + result;
+                transferred = true;
+            }
+            // 환승하지 않는 경우
+            else {
+                if (!transferred) {
+                    result = String.format("%s ", currStation.name) + result;
+                }
+                transferred = false;
+            }
             // 출발역이 환승역인 경우, 환승을 했다고 생각하고 처리
-            if (prevStation.name.equals(departures.name)) break;
+            if (prevStation.name.equals(departures.name)) {
+                result = String.format("%s ", prevStation.name) + result;
+                break;
+            }
+
             currStation = prevStation;
         }
         System.out.println(result);
