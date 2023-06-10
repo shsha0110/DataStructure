@@ -272,7 +272,7 @@ public class Subway {
 
             currStation = prevStation;
         }
-        System.out.println(result);
+        System.out.println(result.trim());
     }
 
     private static void printDuration(Station[] pair, Map<Station, Edge> shortestPath) {
