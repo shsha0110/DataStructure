@@ -7,6 +7,8 @@ import java.util.*;
 public class Subway {
 
     public static List<Station> Stations = new ArrayList<>();
+    private static Map<String, List<Station>> StationMapByName = new HashMap<>();
+    private static Map<String, Station> StationMapByID = new HashMap<>();
     public static Map<String, List<Edge>> Neighbors = new HashMap<>();
     public static final int INF = Integer.MAX_VALUE;
 
@@ -80,6 +82,10 @@ public class Subway {
             Station newStation = new Station(id, name, line);
             // TASK3 ) Add Station object in Stations
             Stations.add(newStation);
+            StationMapByID.put(id, newStation);
+            List<Station> stationsWithSameName = StationMapByName.getOrDefault(name, new ArrayList<>());
+            stationsWithSameName.add(newStation);
+            StationMapByName.put(name, stationsWithSameName);
             // TASK4 ) Add Station id in Neighbors as key, and initialize value
             Neighbors.put(newStation.id, new ArrayList<Edge>());
         }
@@ -112,7 +118,7 @@ public class Subway {
     private final static int DEFAULT_TRANSFER_TIME = 5;
     private static void updateIsTransferStation() {
         for (Station station : Stations) {
-            List<Station> stationsWithSameName = findStationByName(station.name);
+            List<Station> stationsWithSameName = findStationsByName(station.name);
             if (stationsWithSameName.size() >= 2) {
                 // TASK1 ) Update isTransferStation
                 station.isTransferStation = true;
@@ -128,7 +134,7 @@ public class Subway {
             String stationName = data[0];
             int transferTime = Integer.parseInt(data[1]);
             // TASK2 ) Find station by name
-            List<Station> stationWithSameName = findStationByName(stationName);
+            List<Station> stationWithSameName = findStationsByName(stationName);
             for (Station station : stationWithSameName) {
                 // TASK3 ) Update transfer time
                 station.transferTime = transferTime;
@@ -138,7 +144,7 @@ public class Subway {
 
     private static void updateTransferEdge() {
         for (Station station : Stations) {
-            List<Station> stationsWithSameName = findStationByName(station.name);
+            List<Station> stationsWithSameName = findStationsByName(station.name);
             if (stationsWithSameName.size() >= 2) {
                 for (Station stationWithSameName : stationsWithSameName) {
                     if (!station.equals(stationWithSameName)) {
@@ -168,8 +174,8 @@ public class Subway {
         String departuresName = stationNames[0];
         String arrivalsName = stationNames[1];
         // TASK2 ) Find Station object corresponding to station name
-        Station departures = findStationByName(departuresName).get(0);
-        Station arrivals = findStationByName(arrivalsName).get(0);
+        Station departures = findStationsByName(departuresName).get(0);
+        Station arrivals = findStationsByName(arrivalsName).get(0);
 
         return new Station[]{departures, arrivals};
     }
@@ -308,22 +314,11 @@ public class Subway {
     }
 
     /** 5. etc **/
-    private static List<Station> findStationByName(String stationName) {
-        List<Station> result = new ArrayList<>();
-        for (Station station : Stations) {
-            if (stationName.equals(station.name)) {
-                result.add(station);
-            }
-        }
-        return result;
+    private static List<Station> findStationsByName(String name) {
+        return StationMapByName.get(name);
     }
 
-    private static Station findStationByID(String stationID) {
-        for (Station station : Stations) {
-            if (stationID.equals(station.id)) {
-                return station;
-            }
-         }
-        return null;
+    private static Station findStationByID(String id) {
+        return StationMapByID.get(id);
     }
 }
