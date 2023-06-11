@@ -1,5 +1,4 @@
 public class Station {
-
     public String id;
     public String name;
     public String line;
@@ -23,5 +22,4 @@ public class Station {
         }
         return false;
     }
-
 }

@@ -24,15 +24,18 @@ public class Subway {
         List<String[]> transferData = data.get(2);
         updateTransfer(transferData);
         // TASK3 ) Read input
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        // TASK4 ) Process input
-        while (true) {
-            try {
-                String input = br.readLine();
-                if (input.compareTo("QUIT") == 0) { break; }
-                else { command(input); }
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+            // TASK4 ) Process input
+            String input;
+            while ((input = br.readLine()) != null) {
+                if ("QUIT".equals(input)) {
+                    break;
+                } else {
+                    command(input);
+                }
             }
-            catch (IOException e) { }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -106,6 +109,7 @@ public class Subway {
         updateTransferEdge();
     }
 
+    private final static int DEFAULT_TRANSFER_TIME = 5;
     private static void updateIsTransferStation() {
         for (Station station : Stations) {
             List<Station> stationsWithSameName = findStationByName(station.name);
@@ -113,7 +117,7 @@ public class Subway {
                 // TASK1 ) Update isTransferStation
                 station.isTransferStation = true;
                 // TASK2 ) Set default transfer time as 5
-                station.transferTime = 5;
+                station.transferTime = DEFAULT_TRANSFER_TIME;
             }
         }
     }
@@ -272,7 +276,8 @@ public class Subway {
 
             currStation = prevStation;
         }
-        System.out.println(result.trim());
+        //System.out.println(result.trim());
+        System.out.print(result.trim() + "\r\n");
     }
 
     private static void printDuration(Station[] pair, Map<Station, Edge> shortestPath) {
@@ -298,7 +303,8 @@ public class Subway {
             if (prevStation.name.equals(departures.name)) break;
             currStation = prevStation;
         }
-        System.out.println(result);
+        //System.out.println(result);
+        System.out.print(result + "\r\n");
     }
 
     /** 5. etc **/

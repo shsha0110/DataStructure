@@ -1,5 +1,4 @@
 public class Edge {
-
     public String departuresID;
     public String arrivalsID;
     public int duration;
@@ -9,9 +8,4 @@ public class Edge {
         this.arrivalsID = arrivalsID;
         this.duration = duration;
     }
-
-    public Edge(String departuresID, String arrivalsID) {
-        this(departuresID, arrivalsID, Subway.INF);
-    }
-
 }
