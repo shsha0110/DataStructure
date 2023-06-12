@@ -159,84 +159,114 @@ public class Subway {
     /** 4. Process command **/
     private static void command(String input) {
         // TASK1 ) Parsing input, departures and arrivals
-        Station[] pair = parseInput(input);
-        // TASK2 ) Find the shortest path using Dijkstra algorithm
-        Map<Station, Edge> shortestPath = findShortestPath(pair);
-        // TASK3 ) Print path
-        printPath(pair, shortestPath);
-        // TASK4 ) Print duration
-        printDuration(pair, shortestPath);
+        List<Station[]> pairs = parseInput(input);
+        // Initialize shortestPath and minDistance as null and infinite, respectively
+        Station[] minPair = null;
+        Map<Station, Edge> shortestPath = null;
+        int minDistance = Integer.MAX_VALUE;
+
+        for (Station[] pair : pairs) {
+            // TASK2 ) Find the shortest path using Dijkstra algorithm
+            Map<Station, Edge> currentPath = findShortestPath(pair);
+            // TASK3 ) Calculate total distance
+            int currentDistance = calculateTotalDistance(pair, currentPath);
+            // TASK4 ) Compare current distance to min distance
+            if (currentDistance < minDistance) {
+                minPair = pair;
+                minDistance = currentDistance;
+                shortestPath = currentPath;
+            }
+        }
+
+        // TASK5 ) Print path
+        printPath(minPair, shortestPath);
+        // TASK6 ) Print duration
+        printDuration(minPair, shortestPath);
     }
 
-    private static Station[] parseInput(String input) {
+    private static List<Station[]> parseInput(String input) {
         // TASK1 ) Split input, delimited by a space
         String[] stationNames = input.split("\\s");
         String departuresName = stationNames[0];
         String arrivalsName = stationNames[1];
         // TASK2 ) Find Station object corresponding to station name
-        Station departures = findStationsByName(departuresName).get(0);
-        Station arrivals = findStationsByName(arrivalsName).get(0);
+        List<Station> departures = findStationsByName(departuresName);
+        List<Station> arrivals = findStationsByName(arrivalsName);
 
-        return new Station[]{departures, arrivals};
+        List<Station[]> pairs = new ArrayList<>();
+        for (Station departure : departures) {
+            for (Station arrival : arrivals) {
+                pairs.add(new Station[]{departure, arrival});
+            }
+        }
+        return pairs;
     }
 
     private static Map<Station, Edge> findShortestPath(Station[] pair) {
         Station departures = pair[0], arrivals = pair[1];
         Map<Station, Boolean> visited = new HashMap<>();
         Map<Station, Integer> distance = new HashMap<>();
-        Map<Station, Edge> shortedPath = new HashMap<>();
-        // TASK1 ) Initialize visited log as false, distance as infinite, shorted path as null
+        Map<Station, Edge> shortestPath = new HashMap<>();
+        // TASK1 ) Initialize visited log as false, distance as infinite, the shortest path as null
         for (Station station : Stations) {
             visited.put(station, false);
-            distance.put(station, INF);
-            shortedPath.put(station, null);
+            distance.put(station, Integer.MAX_VALUE);
+            shortestPath.put(station, null);
         }
         // TASK2 ) Execute Dijkstra algorithm and update above matrices
-        dijkstra(departures, arrivals, visited, distance, shortedPath);
-        return shortedPath;
+        dijkstra(departures, arrivals, visited, distance, shortestPath);
+        return shortestPath;
+    }
+
+    private static int calculateTotalDistance(Station[] pair, Map<Station, Edge> path) {
+        int totalDistance = 0;
+        Station departures = pair[0], arrivals = pair[1];
+        Station currStation = arrivals;
+
+        // TASK1 ) Iterate through shortest path
+        for (int i = 0; i < path.size(); i++) {
+            // TASK2 ) Break when departures station is reached
+            if (currStation.equals(departures)) break;
+            Edge currEdge = path.get(currStation);
+            // TASK3 ) Accumulate total distance
+            totalDistance += currEdge.duration;
+            currStation = findStationByID(currEdge.departuresID);
+        }
+
+        return totalDistance;
     }
 
     private static void dijkstra(Station departures, Station arrivals, Map<Station, Boolean> visited,
                                  Map<Station, Integer> distance, Map<Station, Edge> path) {
-        // Set the initial distance of the departure station to 0
+        // TASK1 ) Set the initial distance of the departure station to 0
         distance.put(departures, 0);
-
-        // Create a priority queue (min heap) to store stations, using a custom comparator to sort by distance
+        // TASK2 ) Create a priority queue (min heap) to store stations, using a custom comparator to sort by distance
         PriorityQueue<Station> minDistanceStations = new PriorityQueue<>((Station a, Station b) -> distance.get(a) - distance.get(b));
-
-        // Add the departure station to the queue
+        // TASK3 ) Add the departure station to the queue
         minDistanceStations.add(departures);
-
-        // Continue this loop until the queue is empty
+        // TASK4 ) Continue this loop until the queue is empty
         while (!minDistanceStations.isEmpty()) {
-            // Take out the station with the shortest distance
+            // TASK5 ) Take out the station with the shortest distance
             Station currStation = minDistanceStations.poll();
-
-            // Skip if the station has been visited
+            // TASK6 ) Skip if the station has been visited
             if (visited.get(currStation)) continue;
-
-            // Mark the current station as visited
+            // TASK7 ) Mark the current station as visited
             visited.put(currStation, true);
-
-            // If the current station is the destination, we've found the shortest path
+            // TASK8 ) If the current station is the destination, we've found the shortest path
             if (currStation.equals(arrivals)) {
                 return;
             }
-
-            // Get all neighboring stations of the current station
+            // TASK9 ) Get all neighboring stations of the current station
             List<Edge> neighborsOfCurrentStation = Neighbors.get(currStation.id);
             for (Edge neighbor : neighborsOfCurrentStation) {
                 Station neighborStation = findStationByID(neighbor.arrivalsID);
-
-                // Calculate the cost of the path through the current station
+                // TASK10 ) Calculate the cost of the path through the current station
                 int cost = distance.get(currStation) != INF && neighbor.duration != INF ? distance.get(currStation) + neighbor.duration : INF;
-
-                // If this cost is less than the previous cost to get to the neighboring station, update it
+                // TASK11 ) If this cost is less than the previous cost to get to the neighboring station, update it
                 if (cost < distance.get(neighborStation)) {
                     distance.put(neighborStation, cost);
                     path.put(neighborStation, neighbor);
-
-                    // Add the neighboring station to the queue
+                    // TASK12 ) Add the neighboring station to the queue
                     minDistanceStations.add(neighborStation);
                 }
             }
@@ -247,70 +277,51 @@ public class Subway {
         Station departures = pair[0], arrivals = pair[1];
         String result = "";
         Station currStation = arrivals;
-        // 도착역이 환승역인 경우, 환승하지 않고 도착한 것으로 처리
-        for (int i = 0; i < shortestPath.size(); i++) {
-            Edge currEdge = shortestPath.get(currStation);
-            Station prevStation = findStationByID(currEdge.departuresID);
-            if (prevStation.name.equals(arrivals.name)) {
-                currStation = prevStation;
-            } else {
-                break;
-            }
-        }
 
-        boolean transferred = false;
+        // TASK1 ) Iterate through shortest path
         for (int i = 0; i < shortestPath.size(); i++) {
             Edge currEdge = shortestPath.get(currStation);
             Station prevStation = findStationByID(currEdge.departuresID);
-            // 환승하는 경우
+            // TASK2 ) Mark transfer station with []
             if (currStation.name.equals(prevStation.name) && !currStation.line.equals(prevStation.line)) {
                 result = String.format("[%s] ", currStation.name) + result;
-                transferred = true;
+            } else {
+                result = String.format("%s ", currStation.name) + result;
             }
-            // 환승하지 않는 경우
-            else {
-                if (!transferred) {
-                    result = String.format("%s ", currStation.name) + result;
-                }
-                transferred = false;
-            }
-            // 출발역이 환승역인 경우, 환승을 했다고 생각하고 처리
-            if (prevStation.name.equals(departures.name)) {
+            // TASK3 ) Break when departures station is reached
+            if (prevStation.equals(departures)) {
                 result = String.format("%s ", prevStation.name) + result;
                 break;
+            } else {
+                currStation = prevStation;
             }
-
-            currStation = prevStation;
         }
-        //System.out.println(result.trim());
+
+        // TASK4 ) Print out the path
         System.out.print(result.trim() + "\r\n");
     }
 
     private static void printDuration(Station[] pair, Map<Station, Edge> shortestPath) {
         Station departures = pair[0], arrivals = pair[1];
-        int result = 0;
+        int totalDuration = 0;
         Station currStation = arrivals;
-        // 도착역이 환승역인 경우, 환승하지 않고 도착한 것으로 처리
+
+        // TASK1 ) Iterate through shortest path
         for (int i = 0; i < shortestPath.size(); i++) {
+
             Edge currEdge = shortestPath.get(currStation);
-            Station prevStation = findStationByID(currEdge.departuresID);
-            if (prevStation.name.equals(arrivals.name)) {
-                currStation = prevStation;
-            } else {
+            totalDuration += currEdge.duration;
+
+            // TASK2 ) Break when departures station is reached
+            if (currEdge.departuresID.equals(departures.id)) {
                 break;
+            } else {
+                currStation = findStationByID(currEdge.departuresID);
             }
         }
 
-        for (int i = 0; i < shortestPath.size(); i++) {
-            Edge currEdge = shortestPath.get(currStation);
-            Station prevStation = findStationByID(currEdge.departuresID);
-            result += currEdge.duration;
-            // 출발역이 환승역인 경우, 환승을 했다고 생각하고 처리
-            if (prevStation.name.equals(departures.name)) break;
-            currStation = prevStation;
-        }
-        //System.out.println(result);
-        System.out.print(result + "\r\n");
+        // TASK3 ) Print out the total duration
+        System.out.print(totalDuration + "\r\n");
     }
 
     /** 5. etc **/
