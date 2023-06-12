@@ -278,6 +278,7 @@ public class Subway {
         String result = "";
         Station currStation = arrivals;
 
+        boolean transferred = false;
         // TASK1 ) Iterate through shortest path
         for (int i = 0; i < shortestPath.size(); i++) {
             Edge currEdge = shortestPath.get(currStation);
@@ -285,8 +286,12 @@ public class Subway {
             // TASK2 ) Mark transfer station with []
             if (currStation.name.equals(prevStation.name) && !currStation.line.equals(prevStation.line)) {
                 result = String.format("[%s] ", currStation.name) + result;
+                transferred = true;
             } else {
-                result = String.format("%s ", currStation.name) + result;
+                if (!transferred) {
+                    result = String.format("%s ", currStation.name) + result;
+                }
+                transferred = false;
             }
             // TASK3 ) Break when departures station is reached
             if (prevStation.equals(departures)) {
