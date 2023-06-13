@@ -165,11 +165,18 @@ public class Subway {
         Map<Station, Edge> shortestPath = null;
         int minDistance = Integer.MAX_VALUE;
 
+        /**test**/
+        Map<Station[], Map<Station, Edge>> paths = new HashMap<>();
+
         for (Station[] pair : pairs) {
             // TASK2 ) Find the shortest path using Dijkstra algorithm
             Map<Station, Edge> currentPath = findShortestPath(pair);
             // TASK3 ) Calculate total distance
             int currentDistance = calculateTotalDistance(pair, currentPath);
+
+            /**test**/
+            paths.put(pair, currentPath);
+
             // TASK4 ) Compare current distance to min distance
             if (currentDistance < minDistance) {
                 minPair = pair;
@@ -178,8 +185,23 @@ public class Subway {
             }
         }
 
+        /**test**/
+        List<Station[]> minPairs = new ArrayList<>();
+        List<Map<Station, Edge>> shortedPaths = new ArrayList<>();
+        Set<Station[]> keySet = paths.keySet();
+        for (Station[] key : keySet) {
+            Map<Station, Edge> value = paths.get(key);
+            if (calculateTotalDistance(key, value) == minDistance) {
+                minPairs.add(key);
+                shortedPaths.add(value);
+            }
+        }
+
         // TASK5 ) Print path
-        printPath(minPair, shortestPath);
+        //printPath(minPair, shortestPath);
+
+        /**test**/
+        printPaths(minPairs, shortedPaths);
         // TASK6 ) Print duration
         printDuration(minPair, shortestPath);
     }
@@ -304,6 +326,12 @@ public class Subway {
 
         // TASK4 ) Print out the path
         System.out.print(result.trim() + "\r\n");
+    }
+
+    private static void printPaths(List<Station[]> minPairs, List<Map<Station,Edge>> shortedPaths) {
+        for (int i = 0; i < minPairs.size(); i++) {
+            printPath(minPairs.get(i), shortedPaths.get(i));
+        }
     }
 
     private static void printDuration(Station[] pair, Map<Station, Edge> shortestPath) {
