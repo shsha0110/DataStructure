@@ -306,7 +306,7 @@ public class Subway {
             Edge currEdge = shortestPath.get(currStation);
             Station prevStation = findStationByID(currEdge.departuresID);
             // TASK2 ) Mark transfer station with []
-            if (currStation.name.equals(prevStation.name) && !currStation.line.equals(prevStation.line)) {
+            if (currStation.name.equals(prevStation.name) || !currStation.line.equals(prevStation.line)) {
                 result = String.format("[%s] ", currStation.name) + result;
                 transferred = true;
             } else {
